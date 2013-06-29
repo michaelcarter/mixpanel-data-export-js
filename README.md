@@ -43,23 +43,19 @@ panel.retention(call_params).done (data) ->
 **JavaScript Implementation**
 
 ```javascript
-$(document).ready(function() {
+panel = new MixpanelExport({
+  api_key: "my_api_key",
+  api_secret: "my_api_secret"
+});
 
-  panel = new MixpanelExport({
-    api_key: "my_api_key",
-    api_secret: "my_api_secret"
-  });
-  
-  result = panel.retention({
-    from_date: "2013-06-13", 
-    to_date: "2013-06-29", 
-    born_event: "Rendering items"
-  });
+result = panel.retention({
+  from_date: "2013-06-13", 
+  to_date: "2013-06-29", 
+  born_event: "Rendering items"
+});
 
-  result.done(function (data) {
-    console.log(data);
-  });
-
+result.done(function (data) {
+  console.log(data);
 });
 ```
 
