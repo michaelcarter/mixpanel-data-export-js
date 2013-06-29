@@ -6,7 +6,7 @@ Introduction
 
 Simply put, this is a coffeescript class that makes [Mixpanel's data export API](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) easy to use. Simply instantiate the class with your API secret and key and then make calls to api methods and get objects back.
 
-If you don't use coffeescript, put the source through [js2coffee](http://js2coffee.org/) or similar for a pure Javascript version.
+If you don't use coffeescript, I've put the source through [js2coffee](http://js2coffee.org/) for a Javascript version, and also provided a minified Javascript version. These should work in exactly the same way.
 
 Dependencies
 ------------
