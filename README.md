@@ -13,11 +13,7 @@ Dependencies
 
 Currently, this requires the following libraries: 
 
- - [jQuery](http://jquery.com/)
  - [CryptoJS's MD5 implementation](https://code.google.com/p/crypto-js/)
- - [Underscore.js](http://underscorejs.org/)
-
-I'm aware these aren't ideal or even all that necessary (especially underscore). I'll endeavour to remove jQuery and Underscore at some point. Special thanks to anyone that puts in a PR to do it first though!
 
 Usage Instructions
 ------------------
@@ -58,7 +54,5 @@ result.done(function (data) {
   console.log(data);
 });
 ```
-
-Looking through the source you'll probably notice that under the hood this just makes use of [jQuery's $.ajax() method](http://api.jquery.com/jQuery.ajax/), as such you can use your standard `.done()`, `.fail()`, `.always()` etc methods.
 
 A full list of available API methods is detailed on [mixpanel's data export api page](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js). If you find any that are missing please let me know, or better yet put in a pull request.

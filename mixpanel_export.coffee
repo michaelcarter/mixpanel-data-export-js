@@ -38,31 +38,40 @@ class MixpanelExport
   engage: (parameters) -> @get(["engage"], parameters)
 
   get: (method, parameters) ->
-    request_url = @_build_request_url(method, parameters)
-    $.ajax {dataType: "json", url: request_url}
+    result =
+      request_url: @_build_request_url(method, parameters)
+      req: new XMLHttpRequest
+      done: (data) -> throw "[MixpanelExport] You must implement the .done(json) method on the result of your API call!"
+      get: ->
+        @req.open "get", @request_url, true
+        @req.onload = => 
+          result = JSON.parse(@req.responseText)
+          @done(result)
+        @req.send()
+
+    result.get()
+    result
 
   _build_request_url: (method, parameters) ->
     "#{@api_stub}#{method.join?("/") or method}/?#{@_request_parameter_string(parameters)}"
 
   _request_parameter_string: (args) ->
-    connection_params = _.extend
+    connection_params = @_extend
       api_key: @api_key
       expire: @_timeout()
       callback: ""
     , args
 
-    keys = _.keys(connection_params).sort()
-    sig_keys = _.without(keys, "callback")
+    keys = @_keys(connection_params).sort()
+    sig_keys = @_without(keys, "callback")
 
     @_get_parameter_string(keys, connection_params) + "&sig=" + @_get_signature(sig_keys, connection_params)
 
   _get_parameter_string: (keys, connection_params) ->
-    self = @
-    _.map(keys, ((key) -> "#{key}=#{self._url_encode(connection_params[key])}")).join("&")
+    @_map(keys, ((key) => "#{key}=#{@_url_encode(connection_params[key])}")).join("&")
 
   _get_signature: (keys, connection_params) ->
-    self = @
-    sig = _.map(keys, ((key) -> "#{key}=#{self._sig_encode(connection_params[key])}")).join("") + @api_secret
+    sig = @_map(keys, ((key) => "#{key}=#{@_sig_encode(connection_params[key])}")).join("") + @api_secret
     CryptoJS.MD5(sig)    
 
   _url_encode: (param) ->
@@ -79,3 +88,22 @@ class MixpanelExport
 
   _timeout: ->
     Math.round(new Date().getTime()/1000) + @timeout_after
+
+  # Begin underscore replacements
+  
+  _map: (array, action) ->    
+    result = []
+    result.push action(val) for val in array
+    result
+
+  _keys: (obj) ->
+    result = [];
+    result.push key for key of obj
+    result
+
+  _without: (array, key) ->
+    array.filter ((value) -> value != key)
+
+  _extend: (obj, source) ->
+    obj[key] = val for key, val of source
+    obj
