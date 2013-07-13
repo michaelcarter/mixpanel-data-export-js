@@ -1,18 +1,18 @@
-Mixpanel Data Export JS Library
-=========================================
+Mixpanel Data Export
+====================
 
 Introduction
 ------------
 
-Simply put, this is a class that makes [Mixpanel's data export API](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) easy to use. Simply instantiate the class with your API secret and key and then make calls to api methods and get objects back. A NPM is also provided for noders.
+Simply put, this is a JavaScript class that makes [Mixpanel's data export API](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) easy to use. Simply instantiate the class with your API secret and key and then make calls to api methods and get objects back. A NPM is also provided for noders.
 
-NPM Note
-----------------------
+NPM Usage
+---------
 
 The npm name for the library is [mixpanel-data-export](https://npmjs.org/package/mixpanel-data-export), and you can use it just as you would below, with the standard `var MixpanelExport = require('mixpanel-data-export');` added at the beginning of your file.
 
-Usage Instructions
-------------------
+General Usage Instructions
+--------------------------
 
 Every method detailed on [mixpanel's data export api page](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) is available in the library.
 
@@ -41,4 +41,5 @@ Dependencies
 Currently, this requires the following libraries: 
 
  - [CryptoJS's MD5 implementation](https://code.google.com/p/crypto-js/)
+ - [XmlHttpRequest](https://npmjs.org/package/xmlhttprequest) (NPM Only)
 
