@@ -1,0 +1,136 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', '.', '-g' ]
+2 info using npm@1.3.2
+3 info using node@v0.10.13
+4 verbose cache add [ '.', null ]
+5 verbose cache add name=undefined spec="." args=[".",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: '.',
+6 verbose parsed url   path: '.',
+6 verbose parsed url   href: '.' }
+7 silly lockFile 3a52ce78- .
+8 verbose lock . /Users/mikecarter/.npm/3a52ce78-.lock
+9 verbose tar pack [ '/var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/tmp.tgz',
+9 verbose tar pack   '.' ]
+10 verbose tarball /var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/tmp.tgz
+11 verbose folder .
+12 info prepublish mixpanel-data-export@1.0.0
+13 silly lockFile 1f1177db-tar tar://.
+14 verbose lock tar://. /Users/mikecarter/.npm/1f1177db-tar.lock
+15 silly lockFile b76cef79-03126-0-6879503917880356-tmp-tgz tar:///var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/tmp.tgz
+16 verbose lock tar:///var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/tmp.tgz /Users/mikecarter/.npm/b76cef79-03126-0-6879503917880356-tmp-tgz.lock
+17 silly lockFile 1f1177db-tar tar://.
+18 silly lockFile 1f1177db-tar tar://.
+19 silly lockFile b76cef79-03126-0-6879503917880356-tmp-tgz tar:///var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/tmp.tgz
+20 silly lockFile b76cef79-03126-0-6879503917880356-tmp-tgz tar:///var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/tmp.tgz
+21 verbose tar unpack /var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/tmp.tgz
+22 silly lockFile 827a47d6-03126-0-6879503917880356-package tar:///var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/package
+23 verbose lock tar:///var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/package /Users/mikecarter/.npm/827a47d6-03126-0-6879503917880356-package.lock
+24 silly lockFile b76cef79-03126-0-6879503917880356-tmp-tgz tar:///var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/tmp.tgz
+25 verbose lock tar:///var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/tmp.tgz /Users/mikecarter/.npm/b76cef79-03126-0-6879503917880356-tmp-tgz.lock
+26 silly gunzTarPerm modes [ '755', '644' ]
+27 silly gunzTarPerm extractEntry package.json
+28 silly gunzTarPerm extractEntry README.md
+29 silly gunzTarPerm extractEntry npm/lib/mixpanel_data_export.js
+30 silly lockFile 827a47d6-03126-0-6879503917880356-package tar:///var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/package
+31 silly lockFile 827a47d6-03126-0-6879503917880356-package tar:///var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/package
+32 silly lockFile b76cef79-03126-0-6879503917880356-tmp-tgz tar:///var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/tmp.tgz
+33 silly lockFile b76cef79-03126-0-6879503917880356-tmp-tgz tar:///var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/tmp.tgz
+34 verbose tar pack [ '/Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package.tgz',
+34 verbose tar pack   '/var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/package' ]
+35 verbose tarball /Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package.tgz
+36 verbose folder /var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/package
+37 silly lockFile 827a47d6-03126-0-6879503917880356-package tar:///var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/package
+38 verbose lock tar:///var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/package /Users/mikecarter/.npm/827a47d6-03126-0-6879503917880356-package.lock
+39 silly lockFile f621e3e6-el-data-export-1-0-0-package-tgz tar:///Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package.tgz
+40 verbose lock tar:///Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package.tgz /Users/mikecarter/.npm/f621e3e6-el-data-export-1-0-0-package-tgz.lock
+41 silly lockFile 827a47d6-03126-0-6879503917880356-package tar:///var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/package
+42 silly lockFile 827a47d6-03126-0-6879503917880356-package tar:///var/folders/76/tbdlqj1d4gv_10ydvvxd8wn0001qrl/T/npm-2665/1373729503126-0.6879503917880356/package
+43 silly lockFile f621e3e6-el-data-export-1-0-0-package-tgz tar:///Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package.tgz
+44 silly lockFile f621e3e6-el-data-export-1-0-0-package-tgz tar:///Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package.tgz
+45 silly lockFile 3995722f-xpanel-data-export-1-0-0-package /Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package
+46 verbose lock /Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package /Users/mikecarter/.npm/3995722f-xpanel-data-export-1-0-0-package.lock
+47 silly lockFile 3995722f-xpanel-data-export-1-0-0-package /Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package
+48 silly lockFile 3995722f-xpanel-data-export-1-0-0-package /Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package
+49 verbose tar unpack /Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package.tgz
+50 silly lockFile bbd926b5-xpanel-data-export-1-0-0-package tar:///Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package
+51 verbose lock tar:///Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package /Users/mikecarter/.npm/bbd926b5-xpanel-data-export-1-0-0-package.lock
+52 silly lockFile f621e3e6-el-data-export-1-0-0-package-tgz tar:///Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package.tgz
+53 verbose lock tar:///Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package.tgz /Users/mikecarter/.npm/f621e3e6-el-data-export-1-0-0-package-tgz.lock
+54 silly gunzTarPerm modes [ '755', '644' ]
+55 silly gunzTarPerm extractEntry package.json
+56 silly gunzTarPerm extractEntry README.md
+57 silly gunzTarPerm extractEntry npm/lib/mixpanel_data_export.js
+58 silly lockFile bbd926b5-xpanel-data-export-1-0-0-package tar:///Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package
+59 silly lockFile bbd926b5-xpanel-data-export-1-0-0-package tar:///Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package
+60 silly lockFile f621e3e6-el-data-export-1-0-0-package-tgz tar:///Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package.tgz
+61 silly lockFile f621e3e6-el-data-export-1-0-0-package-tgz tar:///Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package.tgz
+62 verbose chmod /Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package.tgz 644
+63 verbose chown /Users/mikecarter/.npm/mixpanel-data-export/1.0.0/package.tgz [ 57107, 20 ]
+64 silly lockFile 3a52ce78- .
+65 silly lockFile 3a52ce78- .
+66 silly resolved [ { name: 'mixpanel-data-export',
+66 silly resolved     version: '1.0.0',
+66 silly resolved     description: 'A wrapper for Mixpanel\'s data export API. Simply instantiate the class with your API secret and key and then make calls to api methods and get json back.',
+66 silly resolved     keywords: [ 'mixpanel', 'api', 'export', 'data', 'analytics' ],
+66 silly resolved     dependencies: { cryptojs: '>=2.5.3', xmlhttprequest: '>=1.5.0' },
+66 silly resolved     homepage: 'https://github.com/michaelcarter/mixpanel-data-export-js',
+66 silly resolved     bugs:
+66 silly resolved      { url: 'https://github.com/michaelcarter/mixpanel-data-export-js/issues',
+66 silly resolved        email: 'mike@mcarter.me' },
+66 silly resolved     license: 'MIT',
+66 silly resolved     author:
+66 silly resolved      { name: 'Mike Carter',
+66 silly resolved        email: 'mike@mcarter.me',
+66 silly resolved        url: 'http://mcarter.me/' },
+66 silly resolved     files: [ 'npm/lib' ],
+66 silly resolved     main: 'npm/lib/mixpanel_data_export.js',
+66 silly resolved     repository:
+66 silly resolved      { type: 'git',
+66 silly resolved        url: 'https://github.com/michaelcarter/mixpanel-data-export-js.git' },
+66 silly resolved     readme: 'Mixpanel Data Export JS Library\n=========================================\n\nIntroduction\n------------\n\nSimply put, this is a coffeescript class that makes [Mixpanel\'s data export API](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) easy to use. Simply instantiate the class with your API secret and key and then make calls to api methods and get objects back.\n\nIf you don\'t use coffeescript, I\'ve put the source through [js2coffee](http://js2coffee.org/) for a Javascript version, and also provided a minified Javascript version. These should work in exactly the same way.\n\nDependencies\n------------\n\nCurrently, this requires the following libraries: \n\n - [CryptoJS\'s MD5 implementation](https://code.google.com/p/crypto-js/)\n\nUsage Instructions\n------------------\n\nEvery method detailed on [mixpanel\'s data export api page](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) is available in the library.\n\n**Coffeescript Implementation**\n\n```coffeescript\npanel = new MixpanelExport\n  api_key: "my_api_key"\n  api_secret: "my_api_secret"\n\ncall_params = \n  from_date: "2013-06-13"\n  to_date: "2013-06-29"\n  born_event: "Rendering items"\n\npanel.retention(call_params).done (data) ->\n  console.log data\n```\n\n**JavaScript Implementation**\n\n```javascript\npanel = new MixpanelExport({\n  api_key: "my_api_key",\n  api_secret: "my_api_secret"\n});\n\nresult = panel.retention({\n  from_date: "2013-06-13", \n  to_date: "2013-06-29", \n  born_event: "Rendering items"\n});\n\nresult.done(function (data) {\n  console.log(data);\n});\n```\n\nA full list of available API methods is detailed on [mixpanel\'s data export api page](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js). If you find any that are missing please let me know, or better yet put in a pull request.\n',
+66 silly resolved     readmeFilename: 'README.md',
+66 silly resolved     _id: 'mixpanel-data-export@1.0.0',
+66 silly resolved     dist: { shasum: '2dd3fc637e8f7d5772eeedabb82036439577a0d9' },
+66 silly resolved     _from: '.' } ]
+67 info install mixpanel-data-export@1.0.0 into /usr/local/lib
+68 info installOne mixpanel-data-export@1.0.0
+69 info /usr/local/lib/node_modules/mixpanel-data-export unbuild
+70 info preuninstall mixpanel-data-export@1.0.0
+71 info uninstall mixpanel-data-export@1.0.0
+72 verbose true,/usr/local/lib/node_modules,/usr/local/lib/node_modules unbuild mixpanel-data-export@1.0.0
+73 info postuninstall mixpanel-data-export@1.0.0
+74 info /usr/local/lib/node_modules/mixpanel-data-export unbuild
+75 info preuninstall mixpanel-data-export@1.0.0
+76 info uninstall mixpanel-data-export@1.0.0
+77 verbose true,/usr/local/lib/node_modules,/usr/local/lib/node_modules unbuild mixpanel-data-export@1.0.0
+78 info postuninstall mixpanel-data-export@1.0.0
+79 error error rolling back Error: EACCES, unlink '/usr/local/lib/node_modules/mixpanel-data-export'
+79 error error rolling back  mixpanel-data-export@1.0.0 { [Error: EACCES, unlink '/usr/local/lib/node_modules/mixpanel-data-export']
+79 error error rolling back   errno: 3,
+79 error error rolling back   code: 'EACCES',
+79 error error rolling back   path: '/usr/local/lib/node_modules/mixpanel-data-export' }
+80 error Error: EACCES, unlink '/usr/local/lib/node_modules/mixpanel-data-export'
+80 error  { [Error: EACCES, unlink '/usr/local/lib/node_modules/mixpanel-data-export']
+80 error   errno: 3,
+80 error   code: 'EACCES',
+80 error   path: '/usr/local/lib/node_modules/mixpanel-data-export' }
+81 error Please try running this command again as root/Administrator.
+82 error System Darwin 12.4.0
+83 error command "node" "/usr/local/bin/npm" "install" "." "-g"
+84 error cwd /Users/mikecarter/work/mixpanel-data-export-js
+85 error node -v v0.10.13
+86 error npm -v 1.3.2
+87 error path /usr/local/lib/node_modules/mixpanel-data-export
+88 error code EACCES
+89 error errno 3
+90 error stack Error: EACCES, unlink '/usr/local/lib/node_modules/mixpanel-data-export'
+91 verbose exit [ 3, true ]
