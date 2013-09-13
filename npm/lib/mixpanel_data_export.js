@@ -12,15 +12,15 @@ MixpanelExport = (function() {
     }
     this.api_key = this.opts.api_key;
     this.api_secret = this.opts.api_secret;
-    this.api_stub = "http://mixpanel.com/api/2.0/" || this.opts.api_stub;
-    this.timeout_after = 10 || this.opts.timeout_after;
+    this.api_stub = this.opts.api_stub || "//mixpanel.com/api/2.0/";
+    this.timeout_after = this.opts.timeout_after || 10;
   }
 
   MixpanelExport.prototype.events = function(parameters) {
     return this.get("events", parameters);
   };
 
-  MixpanelExport.prototype.top_events = function(parameters) {
+  MixpanelExport.prototype.topEvents = function(parameters) {
     return this.get(["events", "top"], parameters);
   };
 
@@ -32,7 +32,7 @@ MixpanelExport = (function() {
     return this.get(["events", "properties"], parameters);
   };
 
-  MixpanelExport.prototype.top_properties = function(parameters) {
+  MixpanelExport.prototype.topProperties = function(parameters) {
     return this.get(["events", "properties", "top"], parameters);
   };
 
@@ -75,7 +75,7 @@ MixpanelExport = (function() {
   MixpanelExport.prototype.get = function(method, parameters) {
     var result;
     result = {
-      request_url: this._build_request_url(method, parameters),
+      request_url: this._buildRequestURL(method, parameters),
       req: new XMLHttpRequest,
       done: function(data) {
         throw "[MixpanelExport] You must implement the .done(json) method on the result of your API call!";
@@ -94,11 +94,11 @@ MixpanelExport = (function() {
     return result;
   };
 
-  MixpanelExport.prototype._build_request_url = function(method, parameters) {
-    return "" + this.api_stub + ((typeof method.join === "function" ? method.join("/") : void 0) || method) + "/?" + (this._request_parameter_string(parameters));
+  MixpanelExport.prototype._buildRequestURL = function(method, parameters) {
+    return "" + this.api_stub + ((typeof method.join === "function" ? method.join("/") : void 0) || method) + "/?" + (this._requestParameterString(parameters));
   };
 
-  MixpanelExport.prototype._request_parameter_string = function(args) {
+  MixpanelExport.prototype._requestParameterString = function(args) {
     var connection_params, keys, sig_keys;
     connection_params = this._extend({
       api_key: this.api_key,
@@ -107,34 +107,34 @@ MixpanelExport = (function() {
     }, args);
     keys = this._keys(connection_params).sort();
     sig_keys = this._without(keys, "callback");
-    return this._get_parameter_string(keys, connection_params) + "&sig=" + this._get_signature(sig_keys, connection_params);
+    return this._getParameterString(keys, connection_params) + "&sig=" + this._getSignature(sig_keys, connection_params);
   };
 
-  MixpanelExport.prototype._get_parameter_string = function(keys, connection_params) {
+  MixpanelExport.prototype._getParameterString = function(keys, connection_params) {
     var _this = this;
     return this._map(keys, (function(key) {
-      return "" + key + "=" + (_this._url_encode(connection_params[key]));
+      return "" + key + "=" + (_this._urlEncode(connection_params[key]));
     })).join("&");
   };
 
-  MixpanelExport.prototype._get_signature = function(keys, connection_params) {
+  MixpanelExport.prototype._getSignature = function(keys, connection_params) {
     var sig,
       _this = this;
     sig = this._map(keys, (function(key) {
-      return "" + key + "=" + (_this._sig_encode(connection_params[key]));
+      return "" + key + "=" + (_this._sigEncode(connection_params[key]));
     })).join("") + this.api_secret;
     return CryptoJS.MD5(sig);
   };
 
-  MixpanelExport.prototype._url_encode = function(param) {
+  MixpanelExport.prototype._urlEncode = function(param) {
     if (Array.isArray(param)) {
       return encodeURIComponent(JSON.stringify(param));
     } else {
-      return param;
+      return encodeURIComponent(param);
     }
   };
 
-  MixpanelExport.prototype._sig_encode = function(param) {
+  MixpanelExport.prototype._sigEncode = function(param) {
     if (Array.isArray(param)) {
       return JSON.stringify(param);
     } else {
@@ -184,5 +184,4 @@ MixpanelExport = (function() {
 
 })();
 
-
-module.exports = MixpanelExport
+module.exports = MixpanelExport;
