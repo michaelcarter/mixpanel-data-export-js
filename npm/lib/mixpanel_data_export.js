@@ -20,6 +20,11 @@ MixpanelExport = (function() {
     return this.get("events", parameters);
   };
 
+  // Remove in a later release.
+  MixpanelExport.prototype.top_events = function(parameters) {
+    return this.get(["events", "top"], parameters);
+  };
+
   MixpanelExport.prototype.topEvents = function(parameters) {
     return this.get(["events", "top"], parameters);
   };
@@ -30,6 +35,11 @@ MixpanelExport = (function() {
 
   MixpanelExport.prototype.properties = function(parameters) {
     return this.get(["events", "properties"], parameters);
+  };
+
+  // Remove in a later release.
+  MixpanelExport.prototype.top_properties = function(parameters) {
+    return this.get(["events", "properties", "top"], parameters);
   };
 
   MixpanelExport.prototype.topProperties = function(parameters) {
