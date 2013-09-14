@@ -56,11 +56,10 @@ result.done(function (data) {
 
 A full list of available API methods is detailed on [mixpanel's data export api page](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js). If you find any that are missing please let me know, or better yet put in a pull request.
 
-Dependencies
-------------
+Dependencies (only a concern for implementing in browser)
+---------------------------------------------------------
 
 Currently, this requires the following libraries: 
 
- - [CryptoJS's MD5 implementation](https://code.google.com/p/crypto-js/)
- - [XmlHttpRequest](https://npmjs.org/package/xmlhttprequest) (NPM Only)
+ - [CryptoJS's MD5 implementation](https://code.google.com/p/crypto-js/) This will just need to be under the CryptoJS namespace when used in a browser.
 
