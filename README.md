@@ -49,7 +49,7 @@ result = panel.retention({
   born_event: "Rendering items"
 });
 
-result.done = function (data) {
+result.done = function(data) {
   console.log(data);
 };
 ```
