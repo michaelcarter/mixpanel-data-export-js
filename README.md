@@ -49,9 +49,9 @@ result = panel.retention({
   born_event: "Rendering items"
 });
 
-result.done(function (data) {
+result.done = function (data) {
   console.log(data);
-});
+};
 ```
 
 A full list of available API methods is detailed on [mixpanel's data export api page](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js). If you find any that are missing please let me know, or better yet put in a pull request.
