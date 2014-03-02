@@ -1,8 +1,5 @@
-Mixpanel Data Export
-====================
-
-v 1.1.0
--------
+Mixpanel Data Export (v 1.1.0)
+==============================
 
 Introduction
 ------------
