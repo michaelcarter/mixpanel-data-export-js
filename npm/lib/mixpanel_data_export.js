@@ -1,4 +1,4 @@
-var CryptoJS = require("cryptojs").Crypto;
+var CryptoJS       = require("cryptojs").Crypto;
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 var MixpanelExport;
@@ -8,7 +8,7 @@ MixpanelExport = (function() {
   function MixpanelExport(opts) {
     this.opts = opts;
     if (!(this.opts.api_key && this.opts.api_secret)) {
-      throw "Error: api_key and api_secret must be passed to Mixpanel constructor.";
+      throw "Error: api_key and api_secret must be passed to MixpanelExport constructor.";
     }
     this.api_key = this.opts.api_key;
     this.api_secret = this.opts.api_secret;

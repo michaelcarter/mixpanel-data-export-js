@@ -1,4 +1,4 @@
-var assert = require("assert")
+var assert         = require("assert");
 var MixpanelExport = require('../../');
 
 var panel = new MixpanelExport({

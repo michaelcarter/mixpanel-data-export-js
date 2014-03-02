@@ -2,30 +2,39 @@
   "name": "mixpanel-data-export",
   "version": "v1.0.3",
   "description": "A wrapper for Mixpanel's data export API. Simply instantiate the class with your API secret and key and then make calls to api methods and get json back.",
-  "keywords": ["mixpanel", "api", "export", "data", "analytics"],
-  "dependencies":
-    {
-      "cryptojs": ">=2.5.3",
-      "xmlhttprequest": ">=1.5.0"
-    },
+  "keywords": [
+    "mixpanel",
+    "api",
+    "export",
+    "data",
+    "analytics"
+  ],
+  "dependencies": {
+    "cryptojs": ">=2.5.3",
+    "xmlhttprequest": ">=1.5.0"
+  },
   "homepage": "https://github.com/michaelcarter/mixpanel-data-export-js",
-  "bugs": 
-    {
-      "url": "https://github.com/michaelcarter/mixpanel-data-export-js/issues",
-      "email": "mike@mcarter.me"
-    },
+  "bugs": {
+    "url": "https://github.com/michaelcarter/mixpanel-data-export-js/issues",
+    "email": "mike@mcarter.me"
+  },
   "license": "MIT",
-  "author": 
-    { 
-      "name" : "Mike Carter",
-      "email" : "mike@mcarter.me",
-      "url" : "http://mcarter.me/"
-    },
-  "files": ["npm/lib"],
+  "author": {
+    "name": "Mike Carter",
+    "email": "mike@mcarter.me",
+    "url": "http://mcarter.me/"
+  },
+  "files": [
+    "npm/lib"
+  ],
   "main": "npm/lib/mixpanel_data_export.js",
-  "repository": 
-    { 
-      "type": "git",
-      "url": "https://github.com/michaelcarter/mixpanel-data-export-js.git"
-    }
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/michaelcarter/mixpanel-data-export-js.git"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-cli": "~0.1.13",
+    "mocha": "~1.17.1"
+  }
 }
