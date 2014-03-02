@@ -16,92 +16,72 @@ MixpanelExport = (function() {
     this.timeout_after = this.opts.timeout_after || 10;
   }
 
-  MixpanelExport.prototype.events = function(parameters) {
-    return this.get("events", parameters);
+  MixpanelExport.prototype.events = function(parameters, callback) {
+    return this.get("events", parameters, callback);
   };
 
-  // Remove in a later release.
-  MixpanelExport.prototype.top_events = function(parameters) {
-    return this.get(["events", "top"], parameters);
+  MixpanelExport.prototype.topEvents = function(parameters, callback) {
+    return this.get(["events", "top"], parameters, callback);
   };
 
-  MixpanelExport.prototype.topEvents = function(parameters) {
-    return this.get(["events", "top"], parameters);
+  MixpanelExport.prototype.names = function(parameters, callback) {
+    return this.get(["events", "names"], parameters, callback);
   };
 
-  MixpanelExport.prototype.names = function(parameters) {
-    return this.get(["events", "names"], parameters);
+  MixpanelExport.prototype.properties = function(parameters, callback) {
+    return this.get(["events", "properties"], parameters, callback);
   };
 
-  MixpanelExport.prototype.properties = function(parameters) {
-    return this.get(["events", "properties"], parameters);
+  MixpanelExport.prototype.topProperties = function(parameters, callback) {
+    return this.get(["events", "properties", "top"], parameters, callback);
   };
 
-  // Remove in a later release.
-  MixpanelExport.prototype.top_properties = function(parameters) {
-    return this.get(["events", "properties", "top"], parameters);
+  MixpanelExport.prototype.values = function(parameters, callback) {
+    return this.get(["events", "properties", "values"], parameters, callback);
   };
 
-  MixpanelExport.prototype.topProperties = function(parameters) {
-    return this.get(["events", "properties", "top"], parameters);
+  MixpanelExport.prototype.funnels = function(parameters, callback) {
+    return this.get(["funnels"], parameters, callback);
   };
 
-  MixpanelExport.prototype.values = function(parameters) {
-    return this.get(["events", "properties", "values"], parameters);
+  MixpanelExport.prototype.list = function(parameters, callback) {
+    return this.get(["funnels", "list"], parameters, callback);
   };
 
-  MixpanelExport.prototype.funnels = function(parameters) {
-    return this.get(["funnels"], parameters);
+  MixpanelExport.prototype.segmentation = function(parameters, callback) {
+    return this.get(["segmentation"], parameters, callback);
   };
 
-  MixpanelExport.prototype.list = function(parameters) {
-    return this.get(["funnels", "list"], parameters);
+  MixpanelExport.prototype.numeric = function(parameters, callback) {
+    return this.get(["segmentation", "numeric"], parameters, callback);
   };
 
-  MixpanelExport.prototype.segmentation = function(parameters) {
-    return this.get(["segmentation"], parameters);
+  MixpanelExport.prototype.sum = function(parameters, callback) {
+    return this.get(["segmentation", "sum"], parameters, callback);
   };
 
-  MixpanelExport.prototype.numeric = function(parameters) {
-    return this.get(["segmentation", "numeric"], parameters);
+  MixpanelExport.prototype.average = function(parameters, callback) {
+    return this.get(["segmentation", "average"], parameters, callback);
   };
 
-  MixpanelExport.prototype.sum = function(parameters) {
-    return this.get(["segmentation", "sum"], parameters);
+  MixpanelExport.prototype.retention = function(parameters, callback) {
+    return this.get(["retention"], parameters, callback);
   };
 
-  MixpanelExport.prototype.average = function(parameters) {
-    return this.get(["segmentation", "average"], parameters);
+  MixpanelExport.prototype.engage = function(parameters, callback) {
+    return this.get(["engage"], parameters, callback);
   };
 
-  MixpanelExport.prototype.retention = function(parameters) {
-    return this.get(["retention"], parameters);
-  };
-
-  MixpanelExport.prototype.engage = function(parameters) {
-    return this.get(["engage"], parameters);
-  };
-
-  MixpanelExport.prototype.get = function(method, parameters) {
-    var result;
-    result = {
-      request_url: this._buildRequestURL(method, parameters),
-      req: new XMLHttpRequest,
-      done: function(data) {
-        throw "[MixpanelExport] You must implement the .done(json) method on the result of your API call!";
-      },
-      get: function() {
-        var _this = this;
-        this.req.open("get", this.request_url, true);
-        this.req.onload = function() {
-          result = JSON.parse(_this.req.responseText);
-          return _this.done(result);
-        };
-        return this.req.send();
-      }
-    };
-    result.get();
-    return result;
+  MixpanelExport.prototype.get = function(method, parameters, callback) {
+    var requestUrl = this._buildRequestURL(method, parameters)
+    var request = new XMLHttpRequest;
+    var success = function() {
+      result = JSON.parse(this.responseText);
+      callback(result);
+    }
+    request.onload = success;
+    request.open("get", requestUrl, true);
+    request.send();
   };
 
   MixpanelExport.prototype._buildRequestURL = function(method, parameters) {
