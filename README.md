@@ -57,5 +57,10 @@ Dependencies (only a concern for implementing in browser)
 
 Currently, this requires the following libraries:
 
- - [CryptoJS's MD5 implementation](https://code.google.com/p/crypto-js/) This will just need to be under the CryptoJS namespace when used in a browser.
+ - [CryptoJS's MD5 implementation](https://code.google.com/p/crypto-js/) This will just need to be under the CryptoJS namespace when used in a browser. A simple inclusion may look like:
+
+ ```html
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+<script src="mixpanel_data_export_min.js"></script>
+ ```
 
