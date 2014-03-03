@@ -68,15 +68,26 @@ var MixpanelExport = (function() {
   };
 
   MixpanelExport.prototype.get = function(method, parameters, callback) {
-    var requestUrl = this._buildRequestURL(method, parameters)
-    var request = new XMLHttpRequest;
-    var success = function() {
-      result = JSON.parse(this.responseText);
-      callback(result);
+    // JSONP
+    if (typeof window === 'object') {
+      var requestUrl = this._buildRequestURL(method, parameters) + "&callback=mpSuccess";
+      window.mpSuccess = callback;
+      var script = document.createElement("script");
+      script.src = requestUrl;
+      document.getElementsByTagName("head")[0].appendChild(script);
     }
-    request.onload = success;
-    request.open("get", requestUrl, true);
-    request.send();
+    // Node
+    else {
+      var requestUrl = this._buildRequestURL(method, parameters)
+      var request = new XMLHttpRequest;
+      var success = function() {
+        result = JSON.parse(this.responseText);
+        callback(result);
+      }
+      request.onload = success;
+      request.open("get", requestUrl, true);
+      request.send();
+    }
   };
 
   MixpanelExport.prototype._buildRequestURL = function(method, parameters) {
@@ -87,13 +98,13 @@ var MixpanelExport = (function() {
     var connection_params, keys, sig_keys;
     connection_params = this._extend({
       api_key: this.api_key,
-      expire: this._timeout(),
-      callback: ""
+      expire: this._timeout()
     }, args);
     keys = this._keys(connection_params).sort();
     sig_keys = this._without(keys, "callback");
     return this._getParameterString(keys, connection_params) + "&sig=" + this._getSignature(sig_keys, connection_params);
   };
+
 
   MixpanelExport.prototype._getParameterString = function(keys, connection_params) {
     var _this = this;
