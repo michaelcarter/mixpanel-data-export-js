@@ -174,11 +174,6 @@ describe('_requestParameterString', function() {
     assert.ok(result.match(/^api_key=.*$/i));
   });
 
-  // required for jsonp
-  it('includes an callback parameter', function() {
-    assert.ok(result.match(/^.*&callback=.*$/i));
-  });
-
   it('includes an expire parameter', function() {
     assert.ok(result.match(/^.*&expire=.*$/i));
   });
