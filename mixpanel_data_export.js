@@ -70,8 +70,14 @@ var MixpanelExport = (function() {
   MixpanelExport.prototype.get = function(method, parameters, callback) {
     // JSONP
     if (typeof window === 'object') {
-      var requestUrl = this._buildRequestURL(method, parameters) + "&callback=mpSuccess";
-      window.mpSuccess = callback;
+      var randomSeed = Math.floor(Math.random()*1000000);
+
+      while(typeof window['mpSuccess' + randomSeed] !== 'undefined') {
+        randomSeed = Math.floor(Math.random()*1000000);
+      }
+
+      var requestUrl = this._buildRequestURL(method, parameters) + "&callback=mpSuccess" + randomSeed;
+      window['mpSuccess' + randomSeed] = callback;
       var script = document.createElement("script");
       script.src = requestUrl;
       document.getElementsByTagName("head")[0].appendChild(script);
