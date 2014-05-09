@@ -9,6 +9,7 @@ var MixpanelExport = (function() {
     this.api_secret = this.opts.api_secret;
     this.api_stub = this.opts.api_stub || "http://mixpanel.com/api/2.0/";
     this.timeout_after = this.opts.timeout_after || 10;
+    this._requestNumber = 0;
   }
 
   MixpanelExport.prototype.events = function(parameters, callback) {
@@ -70,14 +71,9 @@ var MixpanelExport = (function() {
   MixpanelExport.prototype.get = function(method, parameters, callback) {
     // JSONP
     if (typeof window === 'object') {
-      var randomSeed = Math.floor(Math.random()*1000000);
-
-      while(typeof window['mpSuccess' + randomSeed] !== 'undefined') {
-        randomSeed = Math.floor(Math.random()*1000000);
-      }
-
-      var requestUrl = this._buildRequestURL(method, parameters) + "&callback=mpSuccess" + randomSeed;
-      window['mpSuccess' + randomSeed] = callback;
+      var requestNumber = this._getRequestNumber();
+      var requestUrl = this._buildRequestURL(method, parameters) + "&callback=mpSuccess" + requestNumber;
+      window['mpSuccess' + requestNumber] = callback;
       var script = document.createElement("script");
       script.src = requestUrl;
       document.getElementsByTagName("head")[0].appendChild(script);
@@ -180,6 +176,10 @@ var MixpanelExport = (function() {
       obj[key] = val;
     }
     return obj;
+  };
+
+  MixpanelExport.prototype._getRequestNumber = function() {
+    return this._requestNumber++;
   };
 
   return MixpanelExport;
