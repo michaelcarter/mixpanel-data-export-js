@@ -1,9 +1,9 @@
-var CryptoJS       = require("cryptojs").Crypto;
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+if (typeof window !== "object" && typeof require === "function") {
+  var CryptoJS       = require("cryptojs").Crypto;
+  var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+}
 
-var MixpanelExport;
-
-MixpanelExport = (function() {
+var MixpanelExport = (function() {
 
   function MixpanelExport(opts) {
     this.opts = opts;
@@ -14,6 +14,7 @@ MixpanelExport = (function() {
     this.api_secret = this.opts.api_secret;
     this.api_stub = this.opts.api_stub || "http://mixpanel.com/api/2.0/";
     this.timeout_after = this.opts.timeout_after || 10;
+    this._requestNumber = 0;
   }
 
   MixpanelExport.prototype.events = function(parameters, callback) {
@@ -75,8 +76,9 @@ MixpanelExport = (function() {
   MixpanelExport.prototype.get = function(method, parameters, callback) {
     // JSONP
     if (typeof window === 'object') {
-      var requestUrl = this._buildRequestURL(method, parameters) + "&callback=mpSuccess";
-      window.mpSuccess = callback;
+      var requestNumber = this._getNewRequestNumber();
+      var requestUrl = this._buildRequestURL(method, parameters) + "&callback=mpSuccess" + requestNumber;
+      window['mpSuccess' + requestNumber] = callback;
       var script = document.createElement("script");
       script.src = requestUrl;
       document.getElementsByTagName("head")[0].appendChild(script);
@@ -181,8 +183,14 @@ MixpanelExport = (function() {
     return obj;
   };
 
+  MixpanelExport.prototype._getNewRequestNumber = function() {
+    return this._requestNumber++;
+  };
+
   return MixpanelExport;
 
 })();
 
-module.exports = MixpanelExport;
+if (typeof window !== "object" && typeof require === "function") {
+  module.exports = MixpanelExport;
+}

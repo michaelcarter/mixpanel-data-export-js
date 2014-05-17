@@ -1,4 +1,4 @@
-Mixpanel Data Export (v 1.2.0)
+Mixpanel Data Export (v 1.2.1)
 ==============================
 
 Introduction

@@ -1,35 +1,25 @@
-# path = require('path')
+path = require('path')
 
-# config = (grunt) ->
+config = (grunt) ->
+  copy:
+    npm:
+      files: [
+        expand: true
+        cwd: ''
+        src: ["mixpanel_data_export.js"]
+        dest: 'npm/lib'
+      ]
 
-#   copy:
-#     main:
-#       files: [
-#         expand: true
-#         cwd: 'assets/javascripts/spec/fixtures/'
-#         src: ['**']
-#         dest: 'www/js/spec/fixtures/'
-#       ]
+  uglify:
+    min:
+      files:
+        'mixpanel_data_export_min.js': ['mixpanel_data_export.js']
 
-#   haml:
-#     compile:
-#       options:
-#         placement: "amd"
-#         language: "coffee"
-#         target: "js"
-#       files: grunt.file.expandMapping ['assets/javascripts/app/templates/**/*.haml'], 'www/js/'
-#         rename: (base, path) ->
-#           base + path.replace(/assets\/javascripts\//,'').replace(/\.haml$/, '.js')
 
-#   mocha_phantomjs:
-#     options:
-#       reporter: 'dot'
-#     nerds: ['www/js/spec/index.html']
+module.exports = (grunt) ->
+  grunt.initConfig( config(grunt) )
 
-# module.exports = (grunt) ->
+  grunt.loadNpmTasks('grunt-contrib-copy')
+  grunt.loadNpmTasks('grunt-contrib-uglify')
 
-#   grunt.initConfig( config(grunt) )
-
-#   grunt.loadNpmTasks('grunt-contrib-copy')
-#   grunt.loadNpmTasks('grunt-mocha-phantomjs')
-#   grunt.registerTask('default', ['copy'])
+  grunt.registerTask('default', ['copy', 'uglify'])
