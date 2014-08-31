@@ -17,7 +17,7 @@ var MixpanelExport = (function() {
   }
 
   MixpanelExport.prototype.export = function(parameters, callback) {
-    // if (typeof window === 'object') throw new Error("Export is only supported server-side at the moment. If you can figure out how to get the jsonp working for it drop us a PR!");
+    if (typeof window === 'object') throw new Error("Export is only supported server-side at the moment. If you can figure out how to get the jsonp working for it drop us a PR!");
     return this.get("export", parameters, callback);
   }
 
