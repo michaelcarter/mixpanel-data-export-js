@@ -1,4 +1,4 @@
-Mixpanel Data Export (v 1.2.2)
+Mixpanel Data Export (v 1.3.0)
 ==============================
 
 Introduction
@@ -18,6 +18,7 @@ Every method detailed on [mixpanel's data export api page](https://mixpanel.com/
 
 The full list of methods is as follows:
 
+ - `export(parameters, callback)` (node only, see: https://github.com/michaelcarter/mixpanel-data-export-js/issues/3)
  - `events(paramters, callback)`
  - `topEvents(paramters, callback)`
  - `names(paramters, callback)`
