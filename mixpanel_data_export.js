@@ -12,7 +12,7 @@ var MixpanelExport = (function() {
     }
     this.api_key = this.opts.api_key;
     this.api_secret = this.opts.api_secret;
-    this.api_stub = this.opts.api_stub || "http://mixpanel.com/api/2.0/";
+    this.api_stub = this.opts.api_stub || "https://mixpanel.com/api/2.0/";
     this.timeout_after = this.opts.timeout_after || 10;
     this._requestNumber = 0;
   }
