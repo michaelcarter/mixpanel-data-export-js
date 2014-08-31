@@ -13,11 +13,12 @@ var MixpanelExport = (function() {
     this.api_key = this.opts.api_key;
     this.api_secret = this.opts.api_secret;
     this.timeout_after = this.opts.timeout_after || 10;
+    this.isNode = (typeof window !== 'object');
     this._requestNumber = 0;
   }
 
   MixpanelExport.prototype.export = function(parameters, callback) {
-    if (typeof window === 'object') throw new Error("Export is only supported server-side at the moment. If you can figure out how to get the jsonp working for it drop us a PR!");
+    if (!this.isNode) throw new Error(this._jsonpUnsupported("export"));
     return this.get("export", parameters, callback);
   }
 
@@ -74,6 +75,7 @@ var MixpanelExport = (function() {
   };
 
   MixpanelExport.prototype.engage = function(parameters, callback) {
+    if (!this.isNode) throw new Error(this._jsonpUnsupported("engage"));
     return this.get(["engage"], parameters, callback);
   };
 
@@ -81,12 +83,12 @@ var MixpanelExport = (function() {
     var self = this;
 
     // JSONP
-    if (typeof window === 'object' && method !== "export") {
+    if (!this.isNode && method !== "export") {
       var requestNumber = this._getNewRequestNumber();
       var requestUrl = this._buildRequestURL(method, parameters) + "&callback=mpSuccess" + requestNumber;
       var success = function(data) {
-        var resultJSON = (method == "export") ? self.parseExportResult(data) : data;
-        callback(resultJSON);
+        var resultJSON = (method == "export") ? self._parseExportResult(data) : data;
+        return callback(resultJSON);
       }
       window['mpSuccess' + requestNumber] = success;
       var script = document.createElement("script");
@@ -98,8 +100,8 @@ var MixpanelExport = (function() {
       var requestUrl = this._buildRequestURL(method, parameters)
       var request = new XMLHttpRequest;
       var success = function() {
-        var resultJSON = (method == "export") ? self.parseExportResult(this.responseText) : JSON.parse(this.responseText);
-        callback(resultJSON);
+        var resultJSON = (method == "export") ? self._parseExportResult(this.responseText) : JSON.parse(this.responseText);
+        return callback(resultJSON);
       }
       request.onload = success;
       request.open("get", requestUrl, true);
@@ -107,8 +109,12 @@ var MixpanelExport = (function() {
     }
   };
 
+  MixpanelExport.prototype._jsonpUnsupported = function(methodName) {
+    return "MixpanelExport: The '" + methodName + "' method does not support jsonp, and so cannot be used in your browser.";
+  };
+
   // Parses Mixpanel's strange formatting for the export endpoint.
-  MixpanelExport.prototype.parseExportResult = function(result){
+  MixpanelExport.prototype._parseExportResult = function(result){
     var step1 = result.replace(new RegExp('\n', 'g'), ',');
     var step2 = '['+step1+']';
     var result = step2.replace(',]', ']');
