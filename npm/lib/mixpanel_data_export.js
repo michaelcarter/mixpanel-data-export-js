@@ -22,6 +22,18 @@ var MixpanelExport = (function() {
     return this.get("export", parameters, callback);
   }
 
+  MixpanelExport.prototype.annotations = function(parameters, callback) {
+    return this.get("annotations", parameters, callback);
+  };
+
+  MixpanelExport.prototype.createAnnotation = function(parameters, callback) {
+    return this.get(["annotations", "create"], parameters, callback);
+  };
+
+  MixpanelExport.prototype.updateAnnotation = function(parameters, callback) {
+    return this.get(["annotations", "update"], parameters, callback);
+  };
+
   MixpanelExport.prototype.events = function(parameters, callback) {
     return this.get("events", parameters, callback);
   };

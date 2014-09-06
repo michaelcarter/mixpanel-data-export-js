@@ -1,4 +1,4 @@
-Mixpanel Data Export (v 1.3.0)
+Mixpanel Data Export (v 1.4.0)
 ==============================
 
 Introduction
@@ -19,9 +19,12 @@ Every method detailed on [mixpanel's data export api page](https://mixpanel.com/
 The full list of methods is as follows:
 
  - `export(parameters, callback)` (node only, see: https://github.com/michaelcarter/mixpanel-data-export-js/issues/3)
- - `events(paramters, callback)`
- - `topEvents(paramters, callback)`
- - `names(paramters, callback)`
+ - `annotations(parameters, callback)`
+ - `createAnnotation(parameters, callback)`
+ - `updateAnnotation(parameters, callback)`
+ - `events(parameters, callback)`
+ - `topEvents(parameters, callback)`
+ - `names(parameters, callback)`
  - `properties(parameters, callback)`
  - `topProperties(parameters, callback)`
  - `values(parameters, callback)`
@@ -29,7 +32,7 @@ The full list of methods is as follows:
  - `list(parameters, callback)`
  - `segmentation(parameters, callback)`
  - `numeric(parameters, callback)`
- - `sum(paramters, callback)`
+ - `sum(parameters, callback)`
  - `average(parameters, callback)`
  - `retention(parameters, callback)`
  - `engage(parameters, callback)` (node only, see: https://github.com/michaelcarter/mixpanel-data-export-js/issues/6)
