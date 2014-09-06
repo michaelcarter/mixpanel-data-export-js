@@ -32,7 +32,7 @@ The full list of methods is as follows:
  - `sum(paramters, callback)`
  - `average(parameters, callback)`
  - `retention(parameters, callback)`
- - `engage(parameters, callback)`
+ - `engage(parameters, callback)` (node only, see: https://github.com/michaelcarter/mixpanel-data-export-js/issues/6)
 
 An example usage might be:
 
