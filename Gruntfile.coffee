@@ -1,25 +1,85 @@
 path = require('path')
 
 config = (grunt) ->
-  copy:
-    npm:
-      files: [
-        expand: true
-        cwd: ''
-        src: ["mixpanel_data_export.js"]
-        dest: 'npm/lib'
-      ]
+
+  clean: ['tmp', 'dist']
+
+  browserify:
+    release:
+      files:
+        'dist/mixpanel_data_export.js': ['src/mixpanel_data_export.js'] 
+      options:
+        browserifyOptions:
+          standalone: 'MixpanelExport'
+        exclude: ['xmlhttprequest']
+    tests:
+      src: [ './tmp/tests_to_browserify.js' ],
+      dest: './tmp/browserified_tests.js',
+      options:
+        external: [ '../../' ],
+        debug: true
 
   uglify:
-    min:
+    release:
       files:
-        'mixpanel_data_export_min.js': ['mixpanel_data_export.js']
+        'dist/mixpanel_data_export.min.js': ['dist/mixpanel_data_export.js']
 
+  compress:
+    release:
+      options:
+        mode: 'gzip'
+      files: [
+        expand: true,
+        src: ['dist/*.min.js'],
+        ext: '.min.gz.js'
+      ]
+
+  shell:
+    generateTestList:
+      command: 'mkdir -p ./tmp && find test -name \'*.js\' | sed -e \'s/$/");/\' | sed -e \'s/^/require("..\\//\' > tmp/tests_to_browserify.js'
+
+  mochaTest:
+    test:
+      options:
+        reporter: 'spec',
+      src: ['test/**/*.js']
+
+  connect:
+    testServer:
+      options:
+        port: 8001
+        base: '.'
+
+  mocha_phantomjs:
+    all:
+      options:
+        urls: ['http://localhost:8001/test/runner.html']
 
 module.exports = (grunt) ->
   grunt.initConfig( config(grunt) )
 
-  grunt.loadNpmTasks('grunt-contrib-copy')
   grunt.loadNpmTasks('grunt-contrib-uglify')
+  grunt.loadNpmTasks('grunt-contrib-compress')
+  grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-mocha-phantomjs');
+  grunt.loadNpmTasks('grunt-shell');
+  grunt.loadNpmTasks('grunt-contrib-clean'); 
+  grunt.loadNpmTasks('grunt-mocha-test');
 
-  grunt.registerTask('default', ['copy', 'uglify'])
+  grunt.registerTask('default', ['release'])
+
+  grunt.registerTask('release', [
+    'browserify',
+    'uglify',
+    'compress:release'
+  ])
+
+  grunt.registerTask('test', [
+    'clean'
+    'mochaTest'
+    'shell:generateTestList'
+    'release'
+    'connect:testServer'
+    'mocha_phantomjs'
+  ])

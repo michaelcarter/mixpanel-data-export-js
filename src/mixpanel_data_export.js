@@ -1,5 +1,7 @@
+var md5 = require("blueimp-md5").md5;
+var Q = require("q");
+
 if (typeof window !== "object" && typeof require === "function") {
-  var CryptoJS       = require("cryptojs").Crypto;
   var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 }
 
@@ -22,6 +24,11 @@ var MixpanelExport = (function() {
     return this.get("export", parameters, callback);
   }
 
+  MixpanelExport.prototype.engage = function(parameters, callback) {
+    if (!this.isNode) throw new Error(this._jsonpUnsupported("engage"));
+    return this.get(["engage"], parameters, callback);
+  };
+
   MixpanelExport.prototype.annotations = function(parameters, callback) {
     return this.get("annotations", parameters, callback);
   };
@@ -42,19 +49,19 @@ var MixpanelExport = (function() {
     return this.get(["events", "top"], parameters, callback);
   };
 
-  MixpanelExport.prototype.names = function(parameters, callback) {
+  MixpanelExport.prototype.eventNames = function(parameters, callback) {
     return this.get(["events", "names"], parameters, callback);
   };
 
-  MixpanelExport.prototype.properties = function(parameters, callback) {
+  MixpanelExport.prototype.eventProperties = function(parameters, callback) {
     return this.get(["events", "properties"], parameters, callback);
   };
 
-  MixpanelExport.prototype.topProperties = function(parameters, callback) {
+  MixpanelExport.prototype.topEventProperties = function(parameters, callback) {
     return this.get(["events", "properties", "top"], parameters, callback);
   };
 
-  MixpanelExport.prototype.values = function(parameters, callback) {
+  MixpanelExport.prototype.eventPropertyValues = function(parameters, callback) {
     return this.get(["events", "properties", "values"], parameters, callback);
   };
 
@@ -62,7 +69,7 @@ var MixpanelExport = (function() {
     return this.get(["funnels"], parameters, callback);
   };
 
-  MixpanelExport.prototype.list = function(parameters, callback) {
+  MixpanelExport.prototype.listFunnels = function(parameters, callback) {
     return this.get(["funnels", "list"], parameters, callback);
   };
 
@@ -70,15 +77,15 @@ var MixpanelExport = (function() {
     return this.get(["segmentation"], parameters, callback);
   };
 
-  MixpanelExport.prototype.numeric = function(parameters, callback) {
+  MixpanelExport.prototype.numericSegmentation = function(parameters, callback) {
     return this.get(["segmentation", "numeric"], parameters, callback);
   };
 
-  MixpanelExport.prototype.sum = function(parameters, callback) {
+  MixpanelExport.prototype.sumSegmentation = function(parameters, callback) {
     return this.get(["segmentation", "sum"], parameters, callback);
   };
 
-  MixpanelExport.prototype.average = function(parameters, callback) {
+  MixpanelExport.prototype.averageSegmentation = function(parameters, callback) {
     return this.get(["segmentation", "average"], parameters, callback);
   };
 
@@ -86,39 +93,39 @@ var MixpanelExport = (function() {
     return this.get(["retention"], parameters, callback);
   };
 
-  MixpanelExport.prototype.engage = function(parameters, callback) {
-    if (!this.isNode) throw new Error(this._jsonpUnsupported("engage"));
-    return this.get(["engage"], parameters, callback);
-  };
-
+  // TODO: Refactor this spaghetti.
   MixpanelExport.prototype.get = function(method, parameters, callback) {
     var self = this;
+    var deferred = Q.defer();
 
     // JSONP
     if (!this.isNode && method !== "export") {
+      // Unique request number allows us to make multiple calls in parallel.
       var requestNumber = this._getNewRequestNumber();
       var requestUrl = this._buildRequestURL(method, parameters) + "&callback=mpSuccess" + requestNumber;
       var success = function(data) {
         var resultJSON = (method == "export") ? self._parseExportResult(data) : data;
-        return callback(resultJSON);
+        if (callback) { return callback(resultJSON); }
+        deferred.resolve(resultJSON);
       }
       window['mpSuccess' + requestNumber] = success;
       var script = document.createElement("script");
       script.src = requestUrl;
       document.getElementsByTagName("head")[0].appendChild(script);
-    }
-    // Node and "export".
-    else {
+    } else { // Node and "export".
       var requestUrl = this._buildRequestURL(method, parameters)
       var request = new XMLHttpRequest;
       var success = function() {
         var resultJSON = (method == "export") ? self._parseExportResult(this.responseText) : JSON.parse(this.responseText);
-        return callback(resultJSON);
+        if (callback) { return callback(resultJSON); }
+        deferred.resolve(resultJSON);
       }
       request.onload = success;
       request.open("get", requestUrl, true);
       request.send();
     }
+
+    return deferred.promise;
   };
 
   MixpanelExport.prototype._jsonpUnsupported = function(methodName) {
@@ -163,7 +170,7 @@ var MixpanelExport = (function() {
     sig = this._map(keys, (function(key) {
       return "" + key + "=" + (_this._sigEncode(connection_params[key]));
     })).join("") + this.api_secret;
-    return CryptoJS.MD5(sig);
+    return md5(sig);
   };
 
   MixpanelExport.prototype._urlEncode = function(param) {
@@ -225,9 +232,6 @@ var MixpanelExport = (function() {
   };
 
   return MixpanelExport;
-
 })();
 
-if (typeof window !== "object" && typeof require === "function") {
-  module.exports = MixpanelExport;
-}
+module.exports = MixpanelExport;

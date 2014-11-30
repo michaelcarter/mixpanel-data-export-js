@@ -1,5 +1,5 @@
-var assert         = require("assert");
-var MixpanelExport = require('../../');
+var MixpanelExport = require('../../src/mixpanel_data_export');
+var assert = require("assert");
 
 var panel = new MixpanelExport({
   api_key: "test_key",
@@ -19,27 +19,27 @@ describe('API Methods', function(){
     });
   });
 
-  describe('names', function() {
-    it('has names method', function() {
-      assert.ok(panel.names);
+  describe('eventNames', function() {
+    it('has eventNames method', function() {
+      assert.ok(panel.eventNames);
     });
   });
 
-  describe('properties', function() {
-    it('has properties method', function() {
-      assert.ok(panel.properties);
+  describe('eventProperties', function() {
+    it('has eventProperties method', function() {
+      assert.ok(panel.eventProperties);
     });
   });
 
-  describe('topProperties', function() {
-    it('has topProperties method', function() {
-      assert.ok(panel.topProperties);
+  describe('topEventProperties', function() {
+    it('has topEventProperties method', function() {
+      assert.ok(panel.topEventProperties);
     });
   });
 
-  describe('values', function() {
-    it('has values method', function() {
-      assert.ok(panel.values);
+  describe('eventPropertyValues', function() {
+    it('has eventPropertyValues method', function() {
+      assert.ok(panel.eventPropertyValues);
     });
   });
 
@@ -49,9 +49,9 @@ describe('API Methods', function(){
     });
   });
 
-  describe('list', function() {
-    it('has list method', function() {
-      assert.ok(panel.list);
+  describe('listFunnels', function() {
+    it('has listFunnels method', function() {
+      assert.ok(panel.listFunnels);
     });
   });
 
@@ -61,21 +61,21 @@ describe('API Methods', function(){
     });
   });
 
-  describe('numeric', function() {
-    it('has numeric method', function() {
-      assert.ok(panel.numeric);
+  describe('numericSegmentation', function() {
+    it('has numericSegmentation method', function() {
+      assert.ok(panel.numericSegmentation);
     });
   });
 
-  describe('sum', function() {
-    it('has sum method', function() {
-      assert.ok(panel.sum);
+  describe('sumSegmentation', function() {
+    it('has sumSegmentation method', function() {
+      assert.ok(panel.sumSegmentation);
     });
   });
 
-  describe('average', function() {
-    it('has average method', function() {
-      assert.ok(panel.average);
+  describe('averageSegmentation', function() {
+    it('has averageSegmentation method', function() {
+      assert.ok(panel.averageSegmentation);
     });
   });
 
@@ -182,6 +182,3 @@ describe('_requestParameterString', function() {
     assert.ok(result.match(/^.*&sig=.*$/i));
   });
 });
-
-
-
