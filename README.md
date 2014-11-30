@@ -4,40 +4,76 @@ Mixpanel Data Export (v 1.4.0)
 Introduction
 ------------
 
-Simply put, this is a JavaScript library that makes [Mixpanel's data export API](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) easy to use. Simply instantiate the class with your API secret and key and then make calls to api methods and get data back in a callback.
+Simply put, this is a JavaScript library that makes [Mixpanel's data export API](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) easy to use. Simply instantiate the class with your API secret and key and then make calls to api methods and get data back via a promise or callback.
 
-NPM Usage
----------
+Browser Installation
+--------------------
 
-The npm name for the library is [mixpanel-data-export](https://npmjs.org/package/mixpanel-data-export), and you can use it just as you would below, with the standard `var MixpanelExport = require('mixpanel-data-export');`.
+You'll have to host the library yourself, so:
+
+```html
+<script src="your/path/to/mixpanel_data_export.min.js"></script>
+```
+
+NPM Installation
+----------------
+
+Do
+
+```
+npm install mixpanel-data-export --save
+```
+
+then
+
+```javascript
+var MixpanelExport = require('mixpanel-data-export');
+```
 
 General Usage Instructions
 --------------------------
 
-Every method detailed on [mixpanel's data export api page](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) is available in the library. However, where the `top` method is duplicated the method name has a specifier appended, so we get methods like `topProperties()`, and `topEvents()`.
+Every method detailed on [mixpanel's data export api page](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) is available in the library. However, some of the namings have been adjusted to read more semantically, for example, `topEventProperties` , and `eventPropertyValues`.
 
 The full list of methods is as follows:
 
- - `export(parameters, callback)` (node only, see: https://github.com/michaelcarter/mixpanel-data-export-js/issues/3)
- - `annotations(parameters, callback)`
- - `createAnnotation(parameters, callback)`
- - `updateAnnotation(parameters, callback)`
- - `events(parameters, callback)`
- - `topEvents(parameters, callback)`
- - `names(parameters, callback)`
- - `properties(parameters, callback)`
- - `topProperties(parameters, callback)`
- - `values(parameters, callback)`
- - `funnels(parameters, callback)`
- - `list(parameters, callback)`
- - `segmentation(parameters, callback)`
- - `numeric(parameters, callback)`
- - `sum(parameters, callback)`
- - `average(parameters, callback)`
- - `retention(parameters, callback)`
- - `engage(parameters, callback)` (node only, see: https://github.com/michaelcarter/mixpanel-data-export-js/issues/6)
+ - `export(parameters)` (node only, see: https://github.com/michaelcarter/mixpanel-data-export-js/issues/3)
+ - `engage(parameters)` (node only, see: https://github.com/michaelcarter/mixpanel-data-export-js/issues/6)
+ - `annotations(parameters)`
+ - `createAnnotation(parameters)`
+ - `updateAnnotation(parameters)`
+ - `events(parameters)`
+ - `topEvents(parameters)`
+ - `eventNames(parameters)`
+ - `eventProperties(parameters)`
+ - `topEventProperties(parameters)`
+ - `eventPropertyValues(parameters)`
+ - `funnels(parameters)`
+ - `listFunnels(parameters)`
+ - `segmentation(parameters)`
+ - `numericSegmentation(parameters)`
+ - `sumSegmentation(parameters)`
+ - `averageSegmentation(parameters)`
+ - `retention(parameters)`
 
 An example usage might be:
+
+```javascript
+panel = new MixpanelExport({
+  api_key: "my_api_key",
+  api_secret: "my_api_secret"
+});
+
+panel.retention({
+  from_date: "2014-02-28",
+  to_date: "2014-03-10",
+  born_event: "Rendering items"
+}).then(function(data) {
+  console.log(data);
+});
+```
+
+Callbacks are also supported:
 
 ```javascript
 panel = new MixpanelExport({
@@ -55,16 +91,3 @@ result = panel.retention({
 ```
 
 A full list of available API methods is detailed on [mixpanel's data export api page](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js). If you find any that are missing please let me know, or better yet put in a pull request.
-
-Dependencies (only a concern for implementing in browser)
----------------------------------------------------------
-
-Currently, this requires the following libraries:
-
- - [CryptoJS's MD5 implementation](https://code.google.com/p/crypto-js/) This will just need to be under the CryptoJS namespace when used in a browser. A simple inclusion may look like:
-
- ```html
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
-<script src="mixpanel_data_export_min.js"></script>
- ```
-
