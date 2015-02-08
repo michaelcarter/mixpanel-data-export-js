@@ -93,6 +93,10 @@ var MixpanelExport = (function() {
     return this.get(["retention"], parameters, callback);
   };
 
+  MixpanelExport.prototype.addiction = function(parameters, callback) {
+    return this.get(["retention", "addiction"], parameters, callback);
+  };
+
   // TODO: Refactor this spaghetti.
   MixpanelExport.prototype.get = function(method, parameters, callback) {
     var self = this;
@@ -113,7 +117,7 @@ var MixpanelExport = (function() {
       script.src = requestUrl;
       document.getElementsByTagName("head")[0].appendChild(script);
     } else { // Node and "export".
-      var requestUrl = this._buildRequestURL(method, parameters)
+      var requestUrl = this._buildRequestURL(method, parameters);
       var request = new XMLHttpRequest;
       var success = function() {
         var resultJSON = (method == "export") ? self._parseExportResult(this.responseText) : JSON.parse(this.responseText);
