@@ -1,4 +1,26 @@
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.MixpanelExport=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var isObject = require('amp-is-object');
+
+
+module.exports = function(obj) {
+    if (!isObject(obj)) return obj;
+    var source, prop;
+    for (var i = 1, length = arguments.length; i < length; i++) {
+        source = arguments[i];
+        for (prop in source) {
+            obj[prop] = source[prop];
+        }
+    }
+    return obj;
+};
+
+},{"amp-is-object":2}],2:[function(require,module,exports){
+module.exports = function isObject(obj) {
+    var type = typeof obj;
+    return !!obj && (type === 'function' || type === 'object');
+};
+
+},{}],3:[function(require,module,exports){
 /*
  * JavaScript MD5 1.0.1
  * https://github.com/blueimp/JavaScript-MD5
@@ -274,7 +296,7 @@
     }
 }(this));
 
-},{}],2:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -362,7 +384,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],3:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 (function (process){
 // vim:ts=4:sts=4:sw=4:
 /*!
@@ -2303,9 +2325,12 @@ return Q;
 });
 
 }).call(this,require('_process'))
-},{"_process":2}],4:[function(require,module,exports){
+},{"_process":4}],6:[function(require,module,exports){
 var md5 = require("blueimp-md5").md5;
 var Q = require("q");
+var _ = {
+  extend: require('amp-extend'),
+};
 
 if (typeof window !== "object" && typeof require === "function") {
   var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
@@ -2403,39 +2428,40 @@ var MixpanelExport = (function() {
     return this.get(["retention", "addiction"], parameters, callback);
   };
 
-  // TODO: Refactor this spaghetti.
   MixpanelExport.prototype.get = function(method, parameters, callback) {
-    var self = this;
     var deferred = Q.defer();
+    var getMethod = ((this.isNode) ? 'node' : 'jsonp');
 
-    // JSONP
-    if (!this.isNode && method !== "export") {
-      // Unique request number allows us to make multiple calls in parallel.
-      var requestNumber = this._getNewRequestNumber();
-      var requestUrl = this._buildRequestURL(method, parameters) + "&callback=mpSuccess" + requestNumber;
-      var success = function(data) {
-        var resultJSON = (method == "export") ? self._parseExportResult(data) : data;
-        if (callback) { return callback(resultJSON); }
-        deferred.resolve(resultJSON);
+    this['_'+ getMethod + 'Get'](method, parameters, function(data) {
+      if (callback) {
+        return callback(data);
       }
-      window['mpSuccess' + requestNumber] = success;
-      var script = document.createElement("script");
-      script.src = requestUrl;
-      document.getElementsByTagName("head")[0].appendChild(script);
-    } else { // Node and "export".
-      var requestUrl = this._buildRequestURL(method, parameters);
-      var request = new XMLHttpRequest;
-      var success = function() {
-        var resultJSON = (method == "export") ? self._parseExportResult(this.responseText) : JSON.parse(this.responseText);
-        if (callback) { return callback(resultJSON); }
-        deferred.resolve(resultJSON);
-      }
-      request.onload = success;
-      request.open("get", requestUrl, true);
-      request.send();
-    }
+      deferred.resolve(data);
+    });
 
     return deferred.promise;
+  };
+
+  MixpanelExport.prototype._jsonpGet = function(method, parameters, callback) {
+    var requestNumber = this._requestNumber++ // Allows us to make multiple calls in parallel.
+    var requestUrl = this._buildRequestURL(method, parameters) + "&callback=mpSuccess" + requestNumber;
+    var script = document.createElement("script");
+
+    window['mpSuccess' + requestNumber] = callback;
+    script.src = requestUrl;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  };
+
+  MixpanelExport.prototype._nodeGet = function(method, parameters, callback) {
+    var self = this;
+    var request = new XMLHttpRequest;
+
+    request.open("get", this._buildRequestURL(method, parameters), true)
+    request.onload = function() {
+      var resultJSON = (method == "export") ? self._parseExportResult(this.responseText) : JSON.parse(this.responseText);
+      callback(resultJSON);
+    };
+    request.send();
   };
 
   MixpanelExport.prototype._jsonpUnsupported = function(methodName) {
@@ -2456,89 +2482,50 @@ var MixpanelExport = (function() {
   };
 
   MixpanelExport.prototype._requestParameterString = function(args) {
-    var connection_params, keys, sig_keys;
-    connection_params = this._extend({
+    var connection_params = _.extend({
       api_key: this.api_key,
-      expire: this._timeout()
+      expire: this._expireAt()
     }, args);
-    keys = this._keys(connection_params).sort();
-    sig_keys = this._without(keys, "callback");
+    var keys = Object.keys(connection_params).sort();
+    var sig_keys = keys.filter(function(key) {
+      return key !== "callback"
+    });
+
     return this._getParameterString(keys, connection_params) + "&sig=" + this._getSignature(sig_keys, connection_params);
   };
 
-
   MixpanelExport.prototype._getParameterString = function(keys, connection_params) {
-    var _this = this;
-    return this._map(keys, (function(key) {
-      return "" + key + "=" + (_this._urlEncode(connection_params[key]));
-    })).join("&");
+    var self = this;
+
+    return keys.map(function(key) {
+      return "" + key + "=" + (self._urlEncode(connection_params[key]));
+    }).join("&");
   };
 
   MixpanelExport.prototype._getSignature = function(keys, connection_params) {
-    var sig,
-      _this = this;
-    sig = this._map(keys, (function(key) {
-      return "" + key + "=" + (_this._sigEncode(connection_params[key]));
-    })).join("") + this.api_secret;
+    var self = this;
+
+    var sig = keys.map(function(key) {
+      return "" + key + "=" + (self._stringifyIfArray(connection_params[key]));
+    }).join("") + this.api_secret;
+
     return md5(sig);
   };
 
   MixpanelExport.prototype._urlEncode = function(param) {
-    if (Array.isArray(param)) {
-      return encodeURIComponent(JSON.stringify(param));
-    } else {
-      return encodeURIComponent(param);
-    }
+    return encodeURIComponent(this._stringifyIfArray(param));
   };
 
-  MixpanelExport.prototype._sigEncode = function(param) {
-    if (Array.isArray(param)) {
-      return JSON.stringify(param);
-    } else {
-      return param;
+  MixpanelExport.prototype._stringifyIfArray = function(array) {
+    if (!Array.isArray(array)) {
+      return array;
     }
+
+    return JSON.stringify(array);
   };
 
-  MixpanelExport.prototype._timeout = function() {
+  MixpanelExport.prototype._expireAt = function() {
     return Math.round(new Date().getTime() / 1000) + this.timeout_after;
-  };
-
-  MixpanelExport.prototype._map = function(array, action) {
-    var result, val, _i, _len;
-    result = [];
-    for (_i = 0, _len = array.length; _i < _len; _i++) {
-      val = array[_i];
-      result.push(action(val));
-    }
-    return result;
-  };
-
-  MixpanelExport.prototype._keys = function(obj) {
-    var key, result;
-    result = [];
-    for (key in obj) {
-      result.push(key);
-    }
-    return result;
-  };
-
-  MixpanelExport.prototype._without = function(array, key) {
-    return array.filter((function(value) {
-      return value !== key;
-    }));
-  };
-
-  MixpanelExport.prototype._extend = function(obj, source) {
-    var key, val;
-    for (key in source) {
-      val = source[key];
-      obj[key] = val;
-    }
-    return obj;
-  };
-
-  MixpanelExport.prototype._getNewRequestNumber = function() {
-    return this._requestNumber++;
   };
 
   return MixpanelExport;
@@ -2546,5 +2533,5 @@ var MixpanelExport = (function() {
 
 module.exports = MixpanelExport;
 
-},{"blueimp-md5":1,"q":3,"xmlhttprequest":undefined}]},{},[4])(4)
+},{"amp-extend":1,"blueimp-md5":3,"q":5,"xmlhttprequest":undefined}]},{},[6])(6)
 });

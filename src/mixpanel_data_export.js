@@ -1,5 +1,8 @@
 var md5 = require("blueimp-md5").md5;
 var Q = require("q");
+var _ = {
+  extend: require('amp-extend'),
+};
 
 if (typeof window !== "object" && typeof require === "function") {
   var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
@@ -97,39 +100,40 @@ var MixpanelExport = (function() {
     return this.get(["retention", "addiction"], parameters, callback);
   };
 
-  // TODO: Refactor this spaghetti.
   MixpanelExport.prototype.get = function(method, parameters, callback) {
-    var self = this;
     var deferred = Q.defer();
+    var getMethod = ((this.isNode) ? 'node' : 'jsonp');
 
-    // JSONP
-    if (!this.isNode && method !== "export") {
-      // Unique request number allows us to make multiple calls in parallel.
-      var requestNumber = this._getNewRequestNumber();
-      var requestUrl = this._buildRequestURL(method, parameters) + "&callback=mpSuccess" + requestNumber;
-      var success = function(data) {
-        var resultJSON = (method == "export") ? self._parseExportResult(data) : data;
-        if (callback) { return callback(resultJSON); }
-        deferred.resolve(resultJSON);
+    this['_'+ getMethod + 'Get'](method, parameters, function(data) {
+      if (callback) {
+        return callback(data);
       }
-      window['mpSuccess' + requestNumber] = success;
-      var script = document.createElement("script");
-      script.src = requestUrl;
-      document.getElementsByTagName("head")[0].appendChild(script);
-    } else { // Node and "export".
-      var requestUrl = this._buildRequestURL(method, parameters);
-      var request = new XMLHttpRequest;
-      var success = function() {
-        var resultJSON = (method == "export") ? self._parseExportResult(this.responseText) : JSON.parse(this.responseText);
-        if (callback) { return callback(resultJSON); }
-        deferred.resolve(resultJSON);
-      }
-      request.onload = success;
-      request.open("get", requestUrl, true);
-      request.send();
-    }
+      deferred.resolve(data);
+    });
 
     return deferred.promise;
+  };
+
+  MixpanelExport.prototype._jsonpGet = function(method, parameters, callback) {
+    var requestNumber = this._requestNumber++ // Allows us to make multiple calls in parallel.
+    var requestUrl = this._buildRequestURL(method, parameters) + "&callback=mpSuccess" + requestNumber;
+    var script = document.createElement("script");
+
+    window['mpSuccess' + requestNumber] = callback;
+    script.src = requestUrl;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  };
+
+  MixpanelExport.prototype._nodeGet = function(method, parameters, callback) {
+    var self = this;
+    var request = new XMLHttpRequest;
+
+    request.open("get", this._buildRequestURL(method, parameters), true)
+    request.onload = function() {
+      var resultJSON = (method == "export") ? self._parseExportResult(this.responseText) : JSON.parse(this.responseText);
+      callback(resultJSON);
+    };
+    request.send();
   };
 
   MixpanelExport.prototype._jsonpUnsupported = function(methodName) {
@@ -150,89 +154,50 @@ var MixpanelExport = (function() {
   };
 
   MixpanelExport.prototype._requestParameterString = function(args) {
-    var connection_params, keys, sig_keys;
-    connection_params = this._extend({
+    var connection_params = _.extend({
       api_key: this.api_key,
-      expire: this._timeout()
+      expire: this._expireAt()
     }, args);
-    keys = this._keys(connection_params).sort();
-    sig_keys = this._without(keys, "callback");
+    var keys = Object.keys(connection_params).sort();
+    var sig_keys = keys.filter(function(key) {
+      return key !== "callback"
+    });
+
     return this._getParameterString(keys, connection_params) + "&sig=" + this._getSignature(sig_keys, connection_params);
   };
 
-
   MixpanelExport.prototype._getParameterString = function(keys, connection_params) {
-    var _this = this;
-    return this._map(keys, (function(key) {
-      return "" + key + "=" + (_this._urlEncode(connection_params[key]));
-    })).join("&");
+    var self = this;
+
+    return keys.map(function(key) {
+      return "" + key + "=" + (self._urlEncode(connection_params[key]));
+    }).join("&");
   };
 
   MixpanelExport.prototype._getSignature = function(keys, connection_params) {
-    var sig,
-      _this = this;
-    sig = this._map(keys, (function(key) {
-      return "" + key + "=" + (_this._sigEncode(connection_params[key]));
-    })).join("") + this.api_secret;
+    var self = this;
+
+    var sig = keys.map(function(key) {
+      return "" + key + "=" + (self._stringifyIfArray(connection_params[key]));
+    }).join("") + this.api_secret;
+
     return md5(sig);
   };
 
   MixpanelExport.prototype._urlEncode = function(param) {
-    if (Array.isArray(param)) {
-      return encodeURIComponent(JSON.stringify(param));
-    } else {
-      return encodeURIComponent(param);
-    }
+    return encodeURIComponent(this._stringifyIfArray(param));
   };
 
-  MixpanelExport.prototype._sigEncode = function(param) {
-    if (Array.isArray(param)) {
-      return JSON.stringify(param);
-    } else {
-      return param;
+  MixpanelExport.prototype._stringifyIfArray = function(array) {
+    if (!Array.isArray(array)) {
+      return array;
     }
+
+    return JSON.stringify(array);
   };
 
-  MixpanelExport.prototype._timeout = function() {
+  MixpanelExport.prototype._expireAt = function() {
     return Math.round(new Date().getTime() / 1000) + this.timeout_after;
-  };
-
-  MixpanelExport.prototype._map = function(array, action) {
-    var result, val, _i, _len;
-    result = [];
-    for (_i = 0, _len = array.length; _i < _len; _i++) {
-      val = array[_i];
-      result.push(action(val));
-    }
-    return result;
-  };
-
-  MixpanelExport.prototype._keys = function(obj) {
-    var key, result;
-    result = [];
-    for (key in obj) {
-      result.push(key);
-    }
-    return result;
-  };
-
-  MixpanelExport.prototype._without = function(array, key) {
-    return array.filter((function(value) {
-      return value !== key;
-    }));
-  };
-
-  MixpanelExport.prototype._extend = function(obj, source) {
-    var key, val;
-    for (key in source) {
-      val = source[key];
-      obj[key] = val;
-    }
-    return obj;
-  };
-
-  MixpanelExport.prototype._getNewRequestNumber = function() {
-    return this._requestNumber++;
   };
 
   return MixpanelExport;

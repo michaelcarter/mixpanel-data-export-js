@@ -138,14 +138,14 @@ describe('_urlEncode', function() {
   });
 });
 
-describe('_sigEncode', function() {
+describe('_stringifyIfArray', function() {
   it('JSON encodes an array', function(){
-    var result = panel._sigEncode(['test1','test2','test3']);
+    var result = panel._stringifyIfArray(['test1','test2','test3']);
     assert.equal(result, '["test1","test2","test3"]');
   });
 
   it('returns anything else', function() {
-    var result = panel._sigEncode('test parameter');
+    var result = panel._stringifyIfArray('test parameter');
     assert.equal(result, 'test parameter');
   });
 });

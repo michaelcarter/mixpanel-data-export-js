@@ -1,4 +1,4 @@
-Mixpanel Data Export (v 1.6.0)
+Mixpanel Data Export (v 1.6.1)
 ==============================
 
 Introduction
@@ -6,16 +6,7 @@ Introduction
 
 Simply put, this is a JavaScript library that makes [Mixpanel's data export API](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) easy to use. Simply instantiate the class with your API secret and key and then make calls to api methods and get data back via a promise or callback.
 
-Browser Installation
---------------------
-
-You'll have to host the library yourself, so:
-
-```html
-<script src="your/path/to/mixpanel_data_export.min.js"></script>
-```
-
-NPM Installation
+Node Installation
 ----------------
 
 Do
@@ -28,6 +19,15 @@ then
 
 ```javascript
 var MixpanelExport = require('mixpanel-data-export');
+```
+
+Browser Installation
+--------------------
+
+You'll have to host the library yourself, so:
+
+```html
+<script src="your/path/to/mixpanel_data_export.min.js"></script>
 ```
 
 General Usage Instructions
