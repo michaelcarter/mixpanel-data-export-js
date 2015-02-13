@@ -7,7 +7,7 @@ config = (grunt) ->
   browserify:
     release:
       files:
-        'dist/mixpanel_data_export.js': ['src/mixpanel_data_export.js'] 
+        'dist/mixpanel_data_export.js': ['src/mixpanel_data_export.js']
       options:
         browserifyOptions:
           standalone: 'MixpanelExport'
@@ -64,7 +64,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-mocha-phantomjs');
   grunt.loadNpmTasks('grunt-shell');
-  grunt.loadNpmTasks('grunt-contrib-clean'); 
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-mocha-test');
 
   grunt.registerTask('default', ['release'])

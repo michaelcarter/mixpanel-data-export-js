@@ -90,6 +90,12 @@ describe('API Methods', function(){
       assert.ok(panel.engage);
     });
   });
+
+  describe('addiction', function() {
+    it('has addiction method', function() {
+      assert.ok(panel.engage);
+    });
+  });
 });
 
 describe('_getSignature', function() {

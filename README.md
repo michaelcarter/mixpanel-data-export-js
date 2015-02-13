@@ -1,4 +1,4 @@
-Mixpanel Data Export (v 1.5.1)
+Mixpanel Data Export (v 1.6.0)
 ==============================
 
 Introduction
@@ -55,6 +55,7 @@ The full list of methods is as follows:
  - `sumSegmentation(parameters)`
  - `averageSegmentation(parameters)`
  - `retention(parameters)`
+ - `addiction(parameters)`
 
 An example usage might be:
 
