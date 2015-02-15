@@ -7,8 +7,8 @@ describe('ListFunnels', function() {
 
   beforeEach(function() {
     panel = new MixpanelExport({
-      api_key: "api_key",
-      api_secret: "api_secret"
+      api_key: "test_key",
+      api_secret: "test_secret"
     });
   });
 

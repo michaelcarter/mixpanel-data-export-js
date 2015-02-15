@@ -1,10 +1,10 @@
-Mixpanel Data Export (v 1.6.1)
+Mixpanel Data Export (v 1.6.2)
 ==============================
 
 Introduction
 ------------
 
-Simply put, this is a JavaScript library that makes [Mixpanel's data export API](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) easy to use. Simply instantiate the class with your API secret and key and then make calls to api methods and get data back via a promise or callback.
+Simply put, this is a JavaScript library that makes [Mixpanel's data export API](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) easy to use. Simply instantiate the class with your API secret and key and then make calls to api methods and get correctly formatted data back via a promise or callback.
 
 Node Installation
 ----------------
@@ -92,3 +92,8 @@ result = panel.retention({
 ```
 
 A full list of available API methods is detailed on [mixpanel's data export api page](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js). If you find any that are missing please let me know, or better yet put in a pull request.
+
+Known Issues
+------------
+
+ - CSV Formatted JSONP responses cause errors in Browser.

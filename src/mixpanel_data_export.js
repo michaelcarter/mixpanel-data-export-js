@@ -115,11 +115,14 @@ var MixpanelExport = (function() {
   };
 
   MixpanelExport.prototype._jsonpGet = function(method, parameters, callback) {
+    var self = this;
     var requestNumber = this._requestNumber++ // Allows us to make multiple calls in parallel.
     var requestUrl = this._buildRequestURL(method, parameters) + "&callback=mpSuccess" + requestNumber;
     var script = document.createElement("script");
 
-    window['mpSuccess' + requestNumber] = callback;
+    window['mpSuccess' + requestNumber] = function(response) {
+      callback(self._parseResponse(method, parameters, response));
+    };
     script.src = requestUrl;
     document.getElementsByTagName("head")[0].appendChild(script);
   };
@@ -130,8 +133,7 @@ var MixpanelExport = (function() {
 
     request.open("get", this._buildRequestURL(method, parameters), true)
     request.onload = function() {
-      var resultJSON = (method == "export") ? self._parseExportResult(this.responseText) : JSON.parse(this.responseText);
-      callback(resultJSON);
+      callback(self._parseResponse(method, parameters, this.responseText));
     };
     request.send();
   };
@@ -141,10 +143,22 @@ var MixpanelExport = (function() {
   };
 
   // Parses Mixpanel's strange formatting for the export endpoint.
-  MixpanelExport.prototype._parseExportResult = function(result){
-    var step1 = result.replace(new RegExp('\n', 'g'), ',');
-    var step2 = '['+step1+']';
-    var result = step2.replace(',]', ']');
+  MixpanelExport.prototype._parseResponse = function(method, parameters, result) {
+    if (parameters && parameters.format === "csv") {
+      return result;
+    }
+
+    if (typeof result === "object") {
+      return result;
+    }
+
+    if (method === "export") {
+      var step1 = result.replace(new RegExp('\n', 'g'), ',');
+      var step2 = '['+step1+']';
+      var result = step2.replace(',]', ']');
+      return JSON.parse(result);
+    }
+
     return JSON.parse(result);
   };
 
