@@ -14,6 +14,8 @@
     "blueimp-md5": "^1.1.0",
     "md5": "^1.0.0",
     "q": "^1.1.2",
+    "request": "^2.53.0",
+    "split": "^0.3.3",
     "xmlhttprequest": ">=1.5.0"
   },
   "homepage": "https://github.com/michaelcarter/mixpanel-data-export-js",

@@ -25,7 +25,7 @@ var MixpanelExport = (function() {
   MixpanelExport.prototype.export = function(parameters, callback) {
     if (!this.isNode) throw new Error(this._jsonpUnsupported("export"));
     return this.get("export", parameters, callback);
-  }
+  };
 
   MixpanelExport.prototype.engage = function(parameters, callback) {
     if (!this.isNode) throw new Error(this._jsonpUnsupported("engage"));
@@ -131,11 +131,33 @@ var MixpanelExport = (function() {
     var self = this;
     var request = new XMLHttpRequest;
 
-    request.open("get", this._buildRequestURL(method, parameters), true)
+    request.open("get", this._buildRequestURL(method, parameters), true);
     request.onload = function() {
       callback(self._parseResponse(method, parameters, this.responseText));
     };
     request.send();
+  };
+
+  var lineParser = function(line) {
+    var data;
+    try {
+      if (line.length > 0) {
+        data = JSON.parse(line);
+        return data;
+      }
+    } catch(e) {
+      console.log('Ignored line: ' + line);
+    }
+    if (data && data.error) {
+      throw Error(data.error);
+    }
+  };
+
+  MixpanelExport.prototype.getExportStream = function(parameters) {
+    var readable = (require('request'))(this._buildRequestURL('export', parameters));
+    var split = require('split');
+    return readable
+      .pipe(split(lineParser));
   };
 
   MixpanelExport.prototype._jsonpUnsupported = function(methodName) {
