@@ -11,24 +11,45 @@ describe('exportStream', function() {
 
   beforeEach(function() {
     panel = new MixpanelExport({
-      api_key: 'api_key',
-      api_secret: 'api_secret',
+      api_key: '18c103f306a8c9820a141bbc90f322d9',
+      api_secret: '2d3dbfcdc0b6963ab6259d73dfa78e6f',
       streaming_mode: true
     });
   });
 
-  describe('the method', function() {
+  describe('stream', function() {
+    it('should return a timeout parameter', function() {
+      console.log(panel._expireAt());
+    });
+  });
+
+  describe('stream', function() {
 
     it('should return the same results using streaming or full pull', function(done) {
       this.timeout(30000);
+      var line_parse = function(line) {
+        var data;
+        try {
+          if (line.length > 0) {
+            data = JSON.parse(line);
+            return data;
+          }
+        } catch(e) {
+          console.log('Ignored line: ' + line);
+        }
+      };
       var fetch_by_streaming = function() {
         var deferred = Q.defer();
-        var mp_export = panel.getExportStream({
+        var stream = panel.getExportStream({
             from_date: test_start_date,
             to_date: test_end_date
         });
         var data_from_streaming = [];
+        var split = require('split');
+        var mp_export = stream
+          .pipe(split(line_parse));
         mp_export.on('data', function(data) {
+          console.log(data);
           data_from_streaming.push(data);
         });
         mp_export.on('error', function(err) {
@@ -39,8 +60,8 @@ describe('exportStream', function() {
         });
         return deferred.promise;
       };
-      fetch_by_streaming().
-        then(function(data_from_streaming) {
+      fetch_by_streaming()
+        .then(function(data_from_streaming) {
           console.log('data from streaming have been fetched: ' + data_from_streaming.length + ' records');
           panel.export({
               from_date: test_start_date,
