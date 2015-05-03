@@ -111,7 +111,7 @@ var mp_export = panel.getExportStream({
     from_date: "2015-03-01",
     to_date: "2015-03-02"
 });
-// listen on data. Each data is an event object from mixpanel
+// listen on data
 mp_export.on('data', function(data) {
   // do something with it
 });

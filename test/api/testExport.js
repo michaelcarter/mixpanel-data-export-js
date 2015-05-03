@@ -11,8 +11,8 @@ describe('exportStream', function() {
 
   beforeEach(function() {
     panel = new MixpanelExport({
-      api_key: '18c103f306a8c9820a141bbc90f322d9',
-      api_secret: '2d3dbfcdc0b6963ab6259d73dfa78e6f',
+      api_key: 'api_key',
+      api_secret: 'api_secret',
       streaming_mode: true
     });
   });
