@@ -25,7 +25,7 @@ var MixpanelExport = (function() {
   MixpanelExport.prototype.export = function(parameters, callback) {
     if (!this.isNode) throw new Error(this._jsonpUnsupported("export"));
     return this.get("export", parameters, callback);
-  }
+  };
 
   MixpanelExport.prototype.engage = function(parameters, callback) {
     if (!this.isNode) throw new Error(this._jsonpUnsupported("engage"));
@@ -131,11 +131,16 @@ var MixpanelExport = (function() {
     var self = this;
     var request = new XMLHttpRequest;
 
-    request.open("get", this._buildRequestURL(method, parameters), true)
+    request.open("get", this._buildRequestURL(method, parameters), true);
     request.onload = function() {
       callback(self._parseResponse(method, parameters, this.responseText));
     };
     request.send();
+  };
+
+  MixpanelExport.prototype.getExportStream = function(parameters) {
+    var readable = (require('request'))(this._buildRequestURL('export', parameters));
+    return readable;
   };
 
   MixpanelExport.prototype._jsonpUnsupported = function(methodName) {

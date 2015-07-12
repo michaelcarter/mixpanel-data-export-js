@@ -7,8 +7,8 @@ describe('TopEvents', function() {
 
   beforeEach(function() {
     panel = new MixpanelExport({
-      api_key: "test_key",
-      api_secret: "test_secret"
+      api_key: "api_key",
+      api_secret: "api_secret"
     });
   });
 
@@ -20,6 +20,7 @@ describe('TopEvents', function() {
       panel.topEvents({
         type: 'general'
       }).then(function(data) {
+        console.log(data);
         promiseData = data;
         assert.ok(data)
         done();
