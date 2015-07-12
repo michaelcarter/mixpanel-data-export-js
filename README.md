@@ -1,4 +1,4 @@
-Mixpanel Data Export (v 1.7.0)
+Mixpanel Data Export (v 1.8.0)
 ==============================
 
 Simply put, this is a JavaScript library that makes [Mixpanel's data export API](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) easy to use. Simply instantiate the class with your API secret and key and then make calls to api methods and get correctly formatted data back via a promise, callback or stream.
