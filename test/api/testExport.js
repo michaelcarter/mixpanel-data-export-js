@@ -40,7 +40,7 @@ describe('exportStream', function() {
       };
       var fetch_by_streaming = function() {
         var deferred = Q.defer();
-        var stream = panel.getExportStream({
+        var stream = panel.exportStream({
             from_date: test_start_date,
             to_date: test_end_date
         });
@@ -83,7 +83,7 @@ describe('exportStream', function() {
     it('should stream objects and make pauses/resumes', function(done) {
       this.timeout(30000);
       // create a export object
-      var mp_export = panel.getExportStream({
+      var mp_export = panel.exportStream({
           from_date: test_start_date,
           to_date: test_end_date
       });

@@ -6,6 +6,7 @@ var _ = {
 
 if (typeof window !== "object" && typeof require === "function") {
   var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+  var request = require('request');
 }
 
 var MixpanelExport = (function() {
@@ -22,13 +23,21 @@ var MixpanelExport = (function() {
     this._requestNumber = 0;
   }
 
+  // Node-only function. Not supported in browser due to lack of JSONP support on export endpoint.
   MixpanelExport.prototype.export = function(parameters, callback) {
-    if (!this.isNode) throw new Error(this._jsonpUnsupported("export"));
+    if (!this.isNode) throw new Error(this._browserUnsupported("export"));
     return this.get("export", parameters, callback);
   };
 
+  // Node-only function. Not supported in browser due to lack of 'request' module support in-browser.
+  MixpanelExport.prototype.exportStream = function(parameters) {
+    if (!this.isNode) throw new Error(this._browserUnsupported("exportStream"));
+    return request(this._buildRequestURL('export', parameters));
+  };
+
+  // Node-only function. Not supported in browser due to lack of JSONP support on engage endpoint.
   MixpanelExport.prototype.engage = function(parameters, callback) {
-    if (!this.isNode) throw new Error(this._jsonpUnsupported("engage"));
+    if (!this.isNode) throw new Error(this._browserUnsupported("engage"));
     return this.get(["engage"], parameters, callback);
   };
 
@@ -129,22 +138,17 @@ var MixpanelExport = (function() {
 
   MixpanelExport.prototype._nodeGet = function(method, parameters, callback) {
     var self = this;
-    var request = new XMLHttpRequest;
+    var xmlHttpRequest = new XMLHttpRequest;
 
-    request.open("get", this._buildRequestURL(method, parameters), true);
-    request.onload = function() {
+    xmlHttpRequest.open("get", this._buildRequestURL(method, parameters), true);
+    xmlHttpRequest.onload = function() {
       callback(self._parseResponse(method, parameters, this.responseText));
     };
-    request.send();
+    xmlHttpRequest.send();
   };
 
-  MixpanelExport.prototype.getExportStream = function(parameters) {
-    var readable = (require('request'))(this._buildRequestURL('export', parameters));
-    return readable;
-  };
-
-  MixpanelExport.prototype._jsonpUnsupported = function(methodName) {
-    return "MixpanelExport: The '" + methodName + "' method does not support jsonp, and so cannot be used in your browser.";
+  MixpanelExport.prototype._browserUnsupported = function(methodName) {
+    return "MixpanelExport: The '" + methodName + "' method cannot be used in your browser.";
   };
 
   // Parses Mixpanel's strange formatting for the export endpoint.

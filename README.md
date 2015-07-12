@@ -95,39 +95,38 @@ result = panel.retention({
 A full list of available API methods is detailed on [mixpanel's data export api page](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js). If you find any that are missing please let me know, or better yet put in a pull request.
 
 
-Streaming features (experimental)
+Streaming large exports (node-only)
 ---------------
 
-Get the mixpanel export as a stream of events:
+Due to the large size of an export response, it's often appropriate to stream the data instead of waiting for it all:
 
-```
-// create a export object
-var mp_export = panel.getExportStream({
+```javascript 
+// Create a stream object
+var exportStream = panel.exportStream({
     from_date: "2015-03-01",
     to_date: "2015-03-02"
 });
-// listen on data
-mp_export.on('data', function(data) {
+
+// Listen on stream data
+exportStream.on('data', function(data) {
   // do something with it
 });
-// listen for error
-mp_export.on('error', function(err) {
+
+// Listen for a stream error
+exportStream.on('error', function(err) {
   // handle error
 });
-// listen for the end of the stream
-mp_export.on('end', function() {
+
+// Listen for the end of the stream
+exportStream.on('end', function() {
   // move on to do other stuff
 });
-```
 
-// pause the stream
-```
-mp_export.pause()
-```
+// Pause the stream
+exportStream.pause()
 
-// resume the stream
-```
-mp_export.resume()
+// Resume the stream
+exportStream.resume()
 ```
 
 Known Issues
