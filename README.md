@@ -19,44 +19,42 @@ var MixpanelExport = require('mixpanel-data-export');
 
 ## Usage Instructions
 
-Every method detailed on [mixpanel's data export api page](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) is available in the library. However, some of the namings have been adjusted to read more semantically, for example, `topEventProperties` , and `eventPropertyValues`.
+Every method detailed on [mixpanel's data export api page](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) is available in the library. However, some of the namings have been adjusted to read more semantically, for example, `topEventProperties` , and `eventPropertyValues`. The full list of methods is as follows...
 
-The full list of methods is as follows:
-
-### Annotations
+**Annotations:**
  - `annotations(parameters)`
  - `createAnnotation(parameters)`
  - `updateAnnotation(parameters)`
 
-### Export
+**Export:**
  - `export(parameters)` (node only, see: https://github.com/michaelcarter/mixpanel-data-export-js/issues/3)
  - `exportStream(parameters)` (node only, please see: [Streaming Exports](#streaming-exports))
 
-### Events
+**Events:**
  - `events(parameters)`
  - `topEvents(parameters)`
  - `eventNames(parameters)`
 
-### Event Properties
+**Event Properties:**
  - `eventProperties(parameters)`
  - `topEventProperties(parameters)`
  - `eventPropertyValues(parameters)`
 
-### Funnels
+**Funnels:**
  - `funnels(parameters)`
  - `listFunnels(parameters)`
 
-### Segmentation
+**Segmentation:**
  - `segmentation(parameters)`
  - `numericSegmentation(parameters)`
  - `sumSegmentation(parameters)`
  - `averageSegmentation(parameters)`
 
-### Retention
+**Retention:**
  - `retention(parameters)`
  - `addiction(parameters)`
 
-### People Analytics
+**People Analytics:**
  - `engage(parameters)` (node only, see: https://github.com/michaelcarter/mixpanel-data-export-js/issues/6)
 
 An example usage might be:
