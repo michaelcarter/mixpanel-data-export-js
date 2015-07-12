@@ -11,7 +11,7 @@ config = (grunt) ->
       options:
         browserifyOptions:
           standalone: 'MixpanelExport'
-        exclude: ['xmlhttprequest']
+        exclude: ['xmlhttprequest', 'request']
     tests:
       src: [ './tmp/tests_to_browserify.js' ],
       dest: './tmp/browserified_tests.js',
