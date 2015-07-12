@@ -1,122 +1,90 @@
 var MixpanelExport = require('../../src/mixpanel_data_export');
+var testClientConfig = require('../testClientConfig');
 var assert = require('assert');
 var Q = require('q');
+var split = require('split');
 
-var test_start_date = '2015-03-09';
-var test_end_date = '2015-03-10';
+var exportRequestOptions = {
+  from_date: '2015-03-09',
+  to_date: '2015-03-09'
+}
 
 describe('exportStream', function() {
+
+  // Don't bother running these in the headless test browser.
+  if (typeof window === "object") {
+    return;
+  }
 
   var panel;
 
   beforeEach(function() {
-    panel = new MixpanelExport({
-      api_key: 'api_key',
-      api_secret: 'api_secret',
-      streaming_mode: true
-    });
+    panel = new MixpanelExport(testClientConfig);
   });
 
-  describe('stream', function() {
-    it('should return a timeout parameter', function() {
-      console.log(panel._expireAt());
-    });
-  });
+  describe('the method', function() {
 
-  describe('stream', function() {
-
-    it('should return the same results using streaming or full pull', function(done) {
+    it('returns the same results using streaming or an ordinary export', function(done) {
       this.timeout(30000);
-      var line_parse = function(line) {
-        var data;
-        try {
-          if (line.length > 0) {
-            data = JSON.parse(line);
-            return data;
-          }
-        } catch(e) {
-          console.log('Ignored line: ' + line);
-        }
+
+      var parseLine = function(line) {        
+        return (line.length) ? JSON.parse(line) : undefined;
       };
-      var fetch_by_streaming = function() {
+
+      var streamExport = function(fetchOptions) {
         var deferred = Q.defer();
-        var stream = panel.exportStream({
-            from_date: test_start_date,
-            to_date: test_end_date
+        var stream = panel.exportStream(fetchOptions).pipe(split(parseLine));
+        var streamedData = [];
+        
+        stream.on('data', function(data) {
+          streamedData.push(data);
         });
-        var data_from_streaming = [];
-        var split = require('split');
-        var mp_export = stream
-          .pipe(split(line_parse));
-        mp_export.on('data', function(data) {
-          console.log(data);
-          data_from_streaming.push(data);
+
+        stream.on('end', function() {
+          deferred.resolve(streamedData);
         });
-        mp_export.on('error', function(err) {
-          return deferred.reject(err);
-        });
-        mp_export.on('end', function() {
-          return deferred.resolve(data_from_streaming);
-        });
+
+        stream.on('error', deferred.reject);
+
         return deferred.promise;
       };
-      fetch_by_streaming()
-        .then(function(data_from_streaming) {
-          console.log('data from streaming have been fetched: ' + data_from_streaming.length + ' records');
-          panel.export({
-              from_date: test_start_date,
-              to_date: test_end_date
-            })
-            .then(function(data_from_full_batch) {
-              console.log('data from full pull have been fetched: ' + data_from_full_batch.length + ' records');
-              assert(data_from_streaming.length === data_from_full_batch.length);
-              done();
-            });
+
+      var promisedExports = [streamExport(exportRequestOptions), panel.export(exportRequestOptions)]
+
+      Q.all(promisedExports)
+        .then(function(exports) {
+          assert(exports[0].length === exports[1].length);
+          done();
         })
         .catch(function(err){
           console.error(err);
           done(err);
         });
-
     });
 
-    it('should stream objects and make pauses/resumes', function(done) {
+    it('streams objects and make pauses/resumes correctly', function(done) {
       this.timeout(30000);
-      // create a export object
-      var mp_export = panel.exportStream({
-          from_date: test_start_date,
-          to_date: test_end_date
-      });
-      var small_batch_length = 5;
-      var process_a_batch = function(small_batch, callback) {
-            // console.log(small_batch);
-            // console.log('small batch size: ' + small_batch.length);
-            setTimeout(callback, 5);
-      };
+
+      var stream = panel.exportStream(exportRequestOptions);
       var buffer = [];
-      // listen on data. Each data is a event json object from mixpanel
-      mp_export.on('data', function(data) {
+      var smallBatchLength = 50;
+
+      stream.on('data', function(data) {
         buffer.push(data);
-        if (buffer.length > small_batch_length) {
-          // pause downloading of records while we process a batch
-          mp_export.pause();
-          // extract a small batch for the buffer
-          var small_batch = buffer.splice(0,small_batch_length - 1);
-          process_a_batch(small_batch, function(){
-            // resume download after small batch has been processed
-            mp_export.resume();
-          });
+
+        if (buffer.length >= smallBatchLength) {
+          stream.pause();
+          assert.ok(buffer.length == smallBatchLength);
+
+          setTimeout(function() {
+            buffer = [];
+            stream.resume();
+          }, 0)
         }
       });
-      // listen for error
-      mp_export.on('error', function(err) {
-        done(err);
-      });
-      // listen for the end of the stream
-      mp_export.on('end', function() {
-        // process the last batch
-        process_a_batch(buffer, done);
-      });
+
+      stream.on('error', done);
+      stream.on('end', done);
     });
 
   });

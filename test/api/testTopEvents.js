@@ -1,4 +1,5 @@
 var MixpanelExport = require('../../src/mixpanel_data_export');
+var testClientConfig = require('../testClientConfig');
 var assert = require('assert');
 
 describe('TopEvents', function() {
@@ -6,10 +7,7 @@ describe('TopEvents', function() {
   var panel;
 
   beforeEach(function() {
-    panel = new MixpanelExport({
-      api_key: "api_key",
-      api_secret: "api_secret"
-    });
+    panel = new MixpanelExport(testClientConfig);
   });
 
   describe('the method', function() {
@@ -20,9 +18,7 @@ describe('TopEvents', function() {
       panel.topEvents({
         type: 'general'
       }).then(function(data) {
-        console.log(data);
-        promiseData = data;
-        assert.ok(data)
+        assert.ok(data);
         done();
       });
     });
@@ -33,7 +29,6 @@ describe('TopEvents', function() {
       panel.topEvents({
         type: 'general'
       }, function(data) {
-        callbackData = data;
         assert.ok(data)
         done();
       });

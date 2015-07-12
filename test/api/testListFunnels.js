@@ -1,4 +1,5 @@
 var MixpanelExport = require('../../src/mixpanel_data_export');
+var testClientConfig = require('../testClientConfig');
 var assert = require('assert');
 
 describe('ListFunnels', function() {
@@ -6,10 +7,7 @@ describe('ListFunnels', function() {
   var panel;
 
   beforeEach(function() {
-    panel = new MixpanelExport({
-      api_key: "test_key",
-      api_secret: "test_secret"
-    });
+    panel = new MixpanelExport(testClientConfig);
   });
 
   describe('the method', function() {
