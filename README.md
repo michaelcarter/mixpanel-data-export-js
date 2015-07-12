@@ -17,7 +17,7 @@ var MixpanelExport = require('mixpanel-data-export');
 <script src="your/path/to/mixpanel_data_export.min.js"></script>
 ```
 
-## General Usage Instructions
+## Usage Instructions
 
 Every method detailed on [mixpanel's data export api page](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) is available in the library. However, some of the namings have been adjusted to read more semantically, for example, `topEventProperties` , and `eventPropertyValues`.
 
