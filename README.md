@@ -7,12 +7,6 @@ Simply put, this is a JavaScript library that makes [Mixpanel's data export API]
 
 **Node:**
 
-```
-npm install mixpanel-data-export --save
-```
-
-then
-
 ```javascript
 var MixpanelExport = require('mixpanel-data-export');
 ```
