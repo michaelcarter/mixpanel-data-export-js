@@ -1,6 +1,6 @@
 {
   "name": "mixpanel-data-export",
-  "version": "v1.7.0",
+  "version": "v1.8.0",
   "description": "A wrapper for Mixpanel's data export API. Simply instantiate the class with your API secret and key and then make calls to api methods and get json back.",
   "keywords": [
     "mixpanel",
@@ -12,8 +12,8 @@
   "dependencies": {
     "amp-extend": "^1.0.1",
     "blueimp-md5": "^1.1.0",
-    "md5": "^1.0.0",
     "q": "^1.1.2",
+    "request": "^2.53.0",
     "xmlhttprequest": ">=1.5.0"
   },
   "homepage": "https://github.com/michaelcarter/mixpanel-data-export-js",
@@ -33,6 +33,7 @@
     "url": "https://github.com/michaelcarter/mixpanel-data-export-js.git"
   },
   "devDependencies": {
+    "split": "^0.3.3",
     "assert": "^1.1.2",
     "browserify": "^6.3.3",
     "grunt": "~0.4.2",
