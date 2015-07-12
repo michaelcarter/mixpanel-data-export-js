@@ -24,8 +24,7 @@ Every method detailed on [mixpanel's data export api page](https://mixpanel.com/
 The full list of methods is as follows:
 
  - `export(parameters)` (node only, see: https://github.com/michaelcarter/mixpanel-data-export-js/issues/3)
- - `exportStream(parameters)` (node only, please see: [Streaming Exports](#Streaming Exports)
-])
+ - `exportStream(parameters)` (node only, please see: [Streaming Exports](#streaming-exports))
  - `engage(parameters)` (node only, see: https://github.com/michaelcarter/mixpanel-data-export-js/issues/6)
  - `annotations(parameters)`
  - `createAnnotation(parameters)`
