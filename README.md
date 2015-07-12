@@ -38,6 +38,8 @@ Every method detailed on [mixpanel's data export api page](https://mixpanel.com/
 The full list of methods is as follows:
 
  - `export(parameters)` (node only, see: https://github.com/michaelcarter/mixpanel-data-export-js/issues/3)
+ - `exportStream(parameters)` (node only, please see: [Streaming Exports](#Streaming Exports)
+])
  - `engage(parameters)` (node only, see: https://github.com/michaelcarter/mixpanel-data-export-js/issues/6)
  - `annotations(parameters)`
  - `createAnnotation(parameters)`
@@ -95,7 +97,7 @@ result = panel.retention({
 A full list of available API methods is detailed on [mixpanel's data export api page](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js). If you find any that are missing please let me know, or better yet put in a pull request.
 
 
-Streaming large exports (node-only)
+Streaming Exports
 ---------------
 
 Due to the large size of an export response, it's often appropriate to stream the data instead of waiting for it all:
@@ -128,6 +130,8 @@ exportStream.pause()
 // Resume the stream
 exportStream.resume()
 ```
+
+Please note this option is not available in node environments, it's not supported in browser.
 
 Known Issues
 ------------
