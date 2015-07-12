@@ -1,15 +1,11 @@
 Mixpanel Data Export (v 1.7.0)
 ==============================
 
-Introduction
-------------
+Simply put, this is a JavaScript library that makes [Mixpanel's data export API](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) easy to use. Simply instantiate the class with your API secret and key and then make calls to api methods and get correctly formatted data back via a promise, callback or stream.
 
-Simply put, this is a JavaScript library that makes [Mixpanel's data export API](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) easy to use. Simply instantiate the class with your API secret and key and then make calls to api methods and get correctly formatted data back via a promise or callback.
+## Installation
 
-Node Installation
-----------------
-
-Do
+**Node:**
 
 ```
 npm install mixpanel-data-export --save
@@ -21,17 +17,13 @@ then
 var MixpanelExport = require('mixpanel-data-export');
 ```
 
-Browser Installation
---------------------
-
-You'll have to host the library yourself, so:
+**Browser (self-hosted):**
 
 ```html
 <script src="your/path/to/mixpanel_data_export.min.js"></script>
 ```
 
-General Usage Instructions
---------------------------
+## General Usage Instructions
 
 Every method detailed on [mixpanel's data export api page](https://mixpanel.com/docs/api-documentation/data-export-api#libs-js) is available in the library. However, some of the namings have been adjusted to read more semantically, for example, `topEventProperties` , and `eventPropertyValues`.
 
@@ -80,11 +72,6 @@ panel.retention({
 Callbacks are also supported:
 
 ```javascript
-panel = new MixpanelExport({
-  api_key: "my_api_key",
-  api_secret: "my_api_secret"
-});
-
 result = panel.retention({
   from_date: "2014-02-28",
   to_date: "2014-03-10",
@@ -132,8 +119,3 @@ exportStream.resume()
 ```
 
 Please note this option is not available in node environments, it's not supported in browser.
-
-Known Issues
-------------
-
- - CSV Formatted JSONP responses cause errors in Browser.
