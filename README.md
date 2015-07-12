@@ -1,4 +1,4 @@
-Mixpanel Data Export (v 1.6.2)
+Mixpanel Data Export (v 1.7.0)
 ==============================
 
 Introduction
@@ -56,6 +56,7 @@ The full list of methods is as follows:
  - `averageSegmentation(parameters)`
  - `retention(parameters)`
  - `addiction(parameters)`
+ - `get(requestType, parameters)` (Make custom calls to the API for undocumented API methods, e.g: https://github.com/michaelcarter/mixpanel-data-export-js/pull/13)
 
 An example usage might be:
 
