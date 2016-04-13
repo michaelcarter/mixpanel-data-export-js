@@ -129,4 +129,4 @@ exportStream.pause()
 exportStream.resume()
 ```
 
-Please note this option is not available in node environments, it's not supported in browser.
+Please note this option is only available in node environments, it's not supported in browser.
