@@ -194,7 +194,7 @@ var MixpanelExport = (function() {
   MixpanelExport.prototype._getDeprecatedAuthParameterString = function(parameters) {
     var connection_params = _.extend({
       api_key: this.api_key,
-      expire: this._expireAt()
+      expire: Math.round(new Date().getTime() / 1000) + this.timeout_after
     }, parameters);
     var keys = Object.keys(connection_params).sort();
     var sig_keys = keys.filter(function(key) {
@@ -236,7 +236,7 @@ var MixpanelExport = (function() {
 
   MixpanelExport.prototype._base64Encode = function(string) {
     if (typeof window === "object" && window.btoa) {
-      window.btoa(string)
+      return window.btoa(string)
     }
     return new Buffer(string).toString('base64');
   };
@@ -247,10 +247,6 @@ var MixpanelExport = (function() {
     }
     var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
     return new XMLHttpRequest;
-  };
-
-  MixpanelExport.prototype._expireAt = function() {
-    return Math.round(new Date().getTime() / 1000) + this.timeout_after;
   };
 
   return MixpanelExport;

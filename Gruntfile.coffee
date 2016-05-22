@@ -13,7 +13,7 @@ config = (grunt) ->
           standalone: 'MixpanelExport'
         exclude: ['xmlhttprequest', 'request']
     tests:
-      src: [ './tmp/tests_to_browserify.js' ],
+      src: [ './test/karmaBundle.js' ],
       dest: './tmp/browserified_tests.js',
       options:
         external: [ '../../' ],
