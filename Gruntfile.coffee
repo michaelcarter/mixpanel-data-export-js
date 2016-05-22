@@ -44,25 +44,12 @@ config = (grunt) ->
         reporter: 'spec',
       src: ['test/**/*.js']
 
-  connect:
-    testServer:
-      options:
-        port: 8001
-        base: '.'
-
-  mocha_phantomjs:
-    all:
-      options:
-        urls: ['http://localhost:8001/test/runner.html']
-
 module.exports = (grunt) ->
   grunt.initConfig( config(grunt) )
 
   grunt.loadNpmTasks('grunt-contrib-uglify')
   grunt.loadNpmTasks('grunt-contrib-compress')
   grunt.loadNpmTasks('grunt-browserify');
-  grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-mocha-phantomjs');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-mocha-test');
@@ -78,8 +65,4 @@ module.exports = (grunt) ->
   grunt.registerTask('test', [
     'clean'
     'mochaTest'
-    'shell:generateTestList'
-    'release'
-    'connect:testServer'
-    'mocha_phantomjs'
   ])

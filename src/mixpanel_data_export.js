@@ -5,8 +5,7 @@ var _ = {
 };
 
 if (typeof window !== "object" && typeof require === "function") {
-  var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-  var request = require('request');
+  require('Base64');
 }
 
 var MixpanelExport = (function() {
@@ -18,7 +17,7 @@ var MixpanelExport = (function() {
     }
     this.api_key = this.opts.api_key;
     this.api_secret = this.opts.api_secret;
-    this.timeout_after = this.opts.timeout_after || 10;
+    this.timeout_after = this.opts.timeout_after || 60;
     this.isNode = (typeof window !== 'object');
     this._requestNumber = 0;
   }
@@ -27,12 +26,6 @@ var MixpanelExport = (function() {
   MixpanelExport.prototype.export = function(parameters, callback) {
     if (!this.isNode) throw new Error(this._browserUnsupported("export"));
     return this.get("export", parameters, callback);
-  };
-
-  // Node-only function. Not supported in browser due to lack of 'request' module support in-browser.
-  MixpanelExport.prototype.exportStream = function(parameters) {
-    if (!this.isNode) throw new Error(this._browserUnsupported("exportStream"));
-    return request(this._buildRequestURL('export', parameters));
   };
 
   // Node-only function. Not supported in browser due to lack of JSONP support on engage endpoint.
@@ -51,6 +44,10 @@ var MixpanelExport = (function() {
 
   MixpanelExport.prototype.updateAnnotation = function(parameters, callback) {
     return this.get(["annotations", "update"], parameters, callback);
+  };
+
+  MixpanelExport.prototype.deleteAnnotation = function(parameters, callback) {
+    return this.get(["annotations", "delete"], parameters, callback);
   };
 
   MixpanelExport.prototype.events = function(parameters, callback) {
@@ -123,12 +120,15 @@ var MixpanelExport = (function() {
     return deferred.promise;
   };
 
+  // PRIVATE METHODS:
+
+  // a JSONP implementation of 'get' for the browser, uses deprecated auth
+  // because we can't set basic authentication headers on JSONP requests.
   MixpanelExport.prototype._jsonpGet = function(method, parameters, callback) {
     var self = this;
-    var requestNumber = this._requestNumber++ // Allows us to make multiple calls in parallel.
-    var requestUrl = this._buildRequestURL(method, parameters) + "&callback=mpSuccess" + requestNumber;
+    var requestNumber = this._requestNumber++
+    var requestUrl = this._buildDeprecatedAuthURL(method, parameters) + "&callback=mpSuccess" + requestNumber;
     var script = document.createElement("script");
-
     window['mpSuccess' + requestNumber] = function(response) {
       callback(self._parseResponse(method, parameters, response));
     };
@@ -137,14 +137,15 @@ var MixpanelExport = (function() {
   };
 
   MixpanelExport.prototype._nodeGet = function(method, parameters, callback) {
+    var request = this._xmlHttpRequest();
     var self = this;
-    var xmlHttpRequest = new XMLHttpRequest;
 
-    xmlHttpRequest.open("get", this._buildRequestURL(method, parameters), true);
-    xmlHttpRequest.onload = function() {
+    request.open("get", this._buildRequestURL(method, parameters), true);
+    request.setRequestHeader('Authorization', 'Basic ' + this._base64Encode(this.api_secret + ':'));
+    request.onload = function() {
       callback(self._parseResponse(method, parameters, this.responseText));
     };
-    xmlHttpRequest.send();
+    request.send();
   };
 
   MixpanelExport.prototype._browserUnsupported = function(methodName) {
@@ -172,15 +173,29 @@ var MixpanelExport = (function() {
   };
 
   MixpanelExport.prototype._buildRequestURL = function(method, parameters) {
-    var apiStub = (method === "export") ? "https://data.mixpanel.com/api/2.0/" : "https://mixpanel.com/api/2.0/";
-    return "" + apiStub + ((typeof method.join === "function" ? method.join("/") : void 0) || method) + "/?" + (this._requestParameterString(parameters));
+    if (!parameters) {
+      parameters = {};
+    }
+    return this._buildAPIStub(method, parameters) + this._getParameterString(Object.keys(parameters), parameters);
   };
 
-  MixpanelExport.prototype._requestParameterString = function(args) {
+  MixpanelExport.prototype._buildDeprecatedAuthURL = function(method, parameters) {
+    return this._buildAPIStub(method, parameters) + this._getDeprecatedAuthParameterString(parameters);
+  };
+
+  MixpanelExport.prototype._buildAPIStub = function(method) {
+    var apiStub = (method === "export") ? "https://data.mixpanel.com/api/2.0/" : "https://mixpanel.com/api/2.0/";
+    apiStub += (typeof method.join === "function") ? method.join("/") : method;
+    apiStub += "/?";
+
+    return apiStub;
+  };
+
+  MixpanelExport.prototype._getDeprecatedAuthParameterString = function(parameters) {
     var connection_params = _.extend({
       api_key: this.api_key,
       expire: this._expireAt()
-    }, args);
+    }, parameters);
     var keys = Object.keys(connection_params).sort();
     var sig_keys = keys.filter(function(key) {
       return key !== "callback"
@@ -217,6 +232,21 @@ var MixpanelExport = (function() {
     }
 
     return JSON.stringify(array);
+  };
+
+  MixpanelExport.prototype._base64Encode = function(string) {
+    if (typeof window === "object" && window.btoa) {
+      window.btoa(string)
+    }
+    return new Buffer(string).toString('base64');
+  };
+
+  MixpanelExport.prototype._xmlHttpRequest = function() {
+    if (typeof window === "object" && window.XMLHttpRequest) {
+      return new window.XMLHttpRequest;
+    }
+    var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+    return new XMLHttpRequest;
   };
 
   MixpanelExport.prototype._expireAt = function() {

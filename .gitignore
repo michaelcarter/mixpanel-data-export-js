@@ -1,5 +1,6 @@
 tmp/*
 node_modules/*
+test/testClientConfig.js
 sandbox.js
 index.html
 npm-debug.log

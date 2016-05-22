@@ -164,11 +164,11 @@ describe('_getParameterString', function() {
   });
 });
 
-describe('_requestParameterString', function() {
+describe('_getDeprecatedAuthParameterString', function() {
   var result;
 
   before(function() {
-    result = panel._requestParameterString({
+    result = panel._getDeprecatedAuthParameterString({
       this: "test",
       is: "test number two",
       parameter: ['one', 'two', 'three', 'four'],
