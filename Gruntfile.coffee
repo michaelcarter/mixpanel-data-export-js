@@ -63,6 +63,5 @@ module.exports = (grunt) ->
   ])
 
   grunt.registerTask('test', [
-    'clean'
     'mochaTest'
   ])
