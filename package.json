@@ -28,6 +28,7 @@
     "url": "http://mcarter.me/"
   },
   "main": "src/mixpanel_data_export.js",
+  "files": ["dist/*"],
   "repository": {
     "type": "git",
     "url": "https://github.com/michaelcarter/mixpanel-data-export-js.git"
