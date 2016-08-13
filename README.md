@@ -11,10 +11,10 @@ Simply put, this is a JavaScript library that makes [Mixpanel's data export API]
 var MixpanelExport = require('mixpanel-data-export');
 ```
 
-**Browser (self-hosted):**
+**Browser:**
 
 ```html
-<script src="your/path/to/mixpanel_data_export.min.js"></script>
+<script src="https://npmcdn.com/mixpanel-data-export@2.0.1/dist/mixpanel_data_export.min.js"></script>
 ```
 
 ## Usage Instructions
