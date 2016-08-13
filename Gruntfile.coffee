@@ -54,14 +54,5 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-mocha-test');
 
-  grunt.registerTask('default', ['release'])
-
-  grunt.registerTask('release', [
-    'browserify',
-    'uglify',
-    'compress:release'
-  ])
-
-  grunt.registerTask('test', [
-    'mochaTest'
-  ])
+  grunt.registerTask('default', ['release']);
+  grunt.registerTask('build', ['browserify', 'uglify', 'compress:release']);

@@ -33,8 +33,10 @@
     "url": "https://github.com/michaelcarter/mixpanel-data-export-js.git"
   },
   "scripts": {
-    "test": "grunt release && grunt test && karma start",
-    "release": "grunt release"
+    "release": "./scripts/release.sh",
+    "build": "grunt build",
+    "test": "grunt build && grunt mochaTest && karma start && grunt clean",
+    "clean": "grunt clean"
   },
   "devDependencies": {
     "assert": "^1.1.2",
