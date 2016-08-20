@@ -1,6 +1,6 @@
 {
   "name": "mixpanel-data-export",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A wrapper for Mixpanel's data export API. Simply instantiate the class with your API secret and key and then make calls to api methods and get json back.",
   "keywords": [
     "mixpanel",
