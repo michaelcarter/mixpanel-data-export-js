@@ -29,6 +29,7 @@
   },
   "main": "src/mixpanel_data_export.js",
   "files": [
+    "src/*",
     "dist/*"
   ],
   "repository": {
