@@ -14,7 +14,7 @@ var MixpanelExport = require('mixpanel-data-export');
 **Browser:**
 
 ```html
-<script src="https://npmcdn.com/mixpanel-data-export@2.0.2/dist/mixpanel_data_export.min.js"></script>
+<script src="https://unpkg.com/mixpanel-data-export@2.0.2/dist/mixpanel_data_export.min.js"></script>
 ```
 
 ## Usage Instructions
