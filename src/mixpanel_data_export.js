@@ -1,4 +1,4 @@
-var md5 = require("blueimp-md5").md5;
+var md5 = require("js-md5");
 var Q = require("q");
 var _ = {
   extend: require('amp-extend'),
