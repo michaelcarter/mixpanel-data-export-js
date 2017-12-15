@@ -12,7 +12,7 @@
   "dependencies": {
     "Base64": "^0.3.0",
     "amp-extend": "^1.0.1",
-    "blueimp-md5": "^1.1.0",
+    "js-md5": "^0.7.2",
     "q": "^1.1.2",
     "xmlhttprequest": ">=1.5.0"
   },
