@@ -85,6 +85,11 @@ var MixpanelExport = (function() {
   MixpanelExport.prototype.segmentation = function(parameters, callback) {
     return this.get(["segmentation"], parameters, callback);
   };
+  
+  MixpanelExport.prototype.multiseg = function(parameters, callback) {
+    return this.get(["segmentation/multiseg"], parameters, callback);
+  };
+
 
   MixpanelExport.prototype.numericSegmentation = function(parameters, callback) {
     return this.get(["segmentation", "numeric"], parameters, callback);
