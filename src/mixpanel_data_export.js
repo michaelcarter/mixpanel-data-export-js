@@ -1,4 +1,4 @@
-var md5 = require("blueimp-md5").md5;
+var md5 = require("js-md5");
 var Q = require("q");
 var _ = {
   extend: require('amp-extend'),
@@ -85,6 +85,11 @@ var MixpanelExport = (function() {
   MixpanelExport.prototype.segmentation = function(parameters, callback) {
     return this.get(["segmentation"], parameters, callback);
   };
+  
+  MixpanelExport.prototype.multiseg = function(parameters, callback) {
+    return this.get(["segmentation/multiseg"], parameters, callback);
+  };
+
 
   MixpanelExport.prototype.numericSegmentation = function(parameters, callback) {
     return this.get(["segmentation", "numeric"], parameters, callback);
