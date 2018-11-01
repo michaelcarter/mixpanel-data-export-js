@@ -85,7 +85,7 @@ var MixpanelExport = (function() {
   MixpanelExport.prototype.segmentation = function(parameters, callback) {
     return this.get(["segmentation"], parameters, callback);
   };
-  
+
   MixpanelExport.prototype.multiseg = function(parameters, callback) {
     return this.get(["segmentation/multiseg"], parameters, callback);
   };
@@ -148,7 +148,7 @@ var MixpanelExport = (function() {
     request.open("get", this._buildRequestURL(method, parameters), true);
     request.setRequestHeader('Authorization', 'Basic ' + this._base64Encode(this.api_secret + ':'));
     request.onload = function() {
-      callback(self._parseResponse(method, parameters, this.responseText));
+      callback(self._parseResponse(method, parameters, this.responseText, this.status));
     };
     request.send();
   };
@@ -157,8 +157,11 @@ var MixpanelExport = (function() {
     return "MixpanelExport: The '" + methodName + "' method cannot be used in your browser.";
   };
 
-  // Parses Mixpanel's strange formatting for the export endpoint.
-  MixpanelExport.prototype._parseResponse = function(method, parameters, result) {
+  MixpanelExport.prototype._parseResponse = function(method, parameters, result, status) {
+    if (status && status < 200 || status > 299) {
+      return { error: result }
+    }
+
     if (parameters && parameters.format === "csv") {
       return result;
     }
@@ -168,10 +171,10 @@ var MixpanelExport = (function() {
     }
 
     if (method === "export") {
-      var step1 = result.replace(new RegExp('\n', 'g'), ',');
-      var step2 = '['+step1+']';
-      var result = step2.replace(',]', ']');
-      return JSON.parse(result);
+      // Parses Mixpanel's strange formatting for the export endpoint into (hopefully) JSON:
+      var commaSeparated = result.replace(new RegExp('\n', 'g'), ',');
+      var arrayed = '['+commaSeparated+']';
+      result = arrayed.replace(',]', ']');
     }
 
     return JSON.parse(result);

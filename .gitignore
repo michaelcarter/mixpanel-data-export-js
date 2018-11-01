@@ -5,3 +5,4 @@ dist/*
 sandbox.js
 index.html
 npm-debug.log
+.DS_Store
